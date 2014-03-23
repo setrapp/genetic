@@ -19,9 +19,7 @@ public class Timer : MonoBehaviour
 	public bool done;
 
 	void Start() {
-		timeMillisec = durationSec * 1000.0f;
-		done = false;
-		TimeToString();
+		ResetTimer();
 	}
 
 	void Update() {
@@ -30,9 +28,16 @@ public class Timer : MonoBehaviour
 			if (timeMillisec <= 0) {
 				timeMillisec = 0;
 				done = true;
+				SendMessage("TimerDone");
 			}
 			TimeToString();
 		}
+	}
+
+	private void ResetTimer() {
+		timeMillisec = durationSec * 1000.0f;
+		done = false;
+		TimeToString();
 	}
 
 	private void TimeToString() {

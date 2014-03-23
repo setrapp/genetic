@@ -2,6 +2,11 @@
 using System.Collections;
 
 public class Car : MonoBehaviour {
+	// Starting State
+	private Vector3 startingPos;
+	private Quaternion startingRot;
+	private Vector3 startingSca;
+
 	// Car Stats
 	public int topSpeed;
 	public int acceleration;
@@ -23,8 +28,13 @@ public class Car : MonoBehaviour {
 
 	// Progession
 	public float distance = 0.0f;
-	public int lapCount = 1;
+	public int lapCount = 0;
 
+	void Start() {
+		startingPos = transform.position;
+		startingRot = transform.rotation;
+		startingSca = transform.localScale;
+	}
 
 	void Update () {
 		// Accelerate
@@ -67,5 +77,12 @@ public class Car : MonoBehaviour {
 			}
 		}
 		return false;
+	}
+
+	public void ResetCar() {
+		transform.position = startingPos;
+		transform.rotation = startingRot;
+		transform.localScale = startingSca;
+		distance = 0;
 	}
 }

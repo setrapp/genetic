@@ -29,6 +29,10 @@ public class StatsController : MonoBehaviour {
 		ApplyStats();
 	}
 
+	void Update() {
+
+	}
+
 	public void RandomizeStats() {
 		// Generate random stats that does not exceed stat pool.
 		topSpeed = car.statMin + random.Next(0, car.statMax - car.statMin);

@@ -21,6 +21,10 @@ public class Car : MonoBehaviour {
 	public float onTrackFriction = 0.99f;
 	public float offTrackFriction = 0.95f;
 
+	// Progession
+	public float distance = 0.0f;
+	public int lapCount = 1;
+
 
 	void Update () {
 		// Accelerate
@@ -52,6 +56,7 @@ public class Car : MonoBehaviour {
 
 		// Apply velocity
 		transform.Translate(velocity * Time.deltaTime);
+		distance += velocity.magnitude * Time.deltaTime;
 	}
 
 	private bool IsOnTrack() {

@@ -57,7 +57,7 @@ public class Timer : MonoBehaviour
 		}
 		string minString = "" + min;
 
-		timeString = /*minString + ":" +*/ secString + ":" + milliSecString;
+		timeString = minString + ":" + secString + ":" + milliSecString;
 	}
 }
 

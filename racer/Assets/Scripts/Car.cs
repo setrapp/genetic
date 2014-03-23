@@ -38,19 +38,19 @@ public class Car : MonoBehaviour {
 
 	void Update () {
 		// Accelerate
-		if (Input.GetAxis("Vertical") > 0) {
+		//if (Input.GetAxis("Vertical") > 0) {
 			velocity += Vector3.up * (acceleration * accelerationScale * Time.deltaTime);
 			if (velocity.sqrMagnitude > (topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) {
 				velocity = Vector3.up * topSpeed * topSpeedScale;
 			}
-		}
+		//}
 		// Deccelerate
-		else if (Input.GetAxis("Vertical") < 0) {
+		/*else if (Input.GetAxis("Vertical") < 0) {
 			velocity -= Vector3.up * (handling * handlingBrakeScale * Time.deltaTime);
 			if (Vector3.Dot(velocity, Vector3.up) < 0) {
 				velocity = Vector3.zero;
 			}
-		}
+		}*/
 
 		// Friction
 		if (IsOnTrack()) {

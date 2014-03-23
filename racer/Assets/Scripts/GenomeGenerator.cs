@@ -15,7 +15,7 @@ public class GenomeGenerator : MonoBehaviour
 	}
 
 	public bool done = false;
-	public Car car;
+	public List<Car> cars;
 	public StatsController statsController;
 	private List<Genome> population;
 
@@ -47,6 +47,7 @@ public class GenomeGenerator : MonoBehaviour
 			RandomizeStats(out newTopSpeed, out newAcceleration, out newHandling);
 			population.Add(new Genome(newTopSpeed, newAcceleration, newHandling));
 		}
+		membersInGeneration = cars.Count;
 		currentGeneration = 0;
 		currentMember = 0;
 		ApplyStats();
@@ -217,28 +218,26 @@ public class GenomeGenerator : MonoBehaviour
 	}
 
 	private void ApplyStats() {
-		statsController.topSpeed = population[currentMember].topSpeed;
-		statsController.acceleration = population[currentMember].acceleration;
-		statsController.handling = population[currentMember].handling;
+		statsController.topSpeed = car.topSpeed;
+		statsController.acceleration = population[currentMember].car.acceleration;
+		statsController.handling = population[currentMember].car.handling;
 		statsController.ApplyStats ();
 	}
 }
 
 public class Genome {
+	public Car car;
 	public int fitness;
-	public int topSpeed;
-	public int acceleration;
-	public int handling;
 
 	public Genome() {
-		this.topSpeed = 0;
-		this.acceleration = 0;
-		this.handling = 0;
+		car.topSpeed = 0;
+		car.acceleration = 0;
+		car.handling = 0;
 	}
 	public Genome(int topSpeed, int acceleration, int handling) {
-		this.topSpeed = topSpeed;
-		this.acceleration = acceleration;
-		this.handling = handling;
+		car.topSpeed = topSpeed;
+		car.acceleration = acceleration;
+		car.handling = handling;
 	}
 }
 

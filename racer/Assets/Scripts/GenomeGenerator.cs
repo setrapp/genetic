@@ -220,7 +220,7 @@ public class GenomeGenerator : MonoBehaviour
 		statsController.topSpeed = population[currentMember].topSpeed;
 		statsController.acceleration = population[currentMember].acceleration;
 		statsController.handling = population[currentMember].handling;
-		statsController.ApplyStats ();
+		statsController.ApplyStats();
 	}
 }
 

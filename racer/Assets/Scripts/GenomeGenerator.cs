@@ -26,6 +26,7 @@ public class GenomeGenerator : MonoBehaviour
 	private System.Random genomeRandom;
 	public int statSeed;
 	private System.Random statRandom;
+	public int driverSeed;
 
 	// Mutation
 	public float mutationRate = 0.1f;
@@ -50,6 +51,9 @@ public class GenomeGenerator : MonoBehaviour
 			population.Add(new Genome());
 			float color = (float)i / (membersInGeneration - 1);
 			cars[i].renderer.material.color = new Color(color, color, color, 1);
+			cars[i].driver.SeedRandom(driverSeed + i);
+			cars[i].driver.Init(Timer.Instance.durationSec * 1000);
+			cars[i].driver.GenerateAllMoves();
 			population[i].car = cars[i];
 		}
 		currentGeneration = 0;
@@ -148,6 +152,13 @@ public class GenomeGenerator : MonoBehaviour
 		if ((float)genomeRandom.NextDouble() < mutationRate) {
 			MutateStats(child);
 		}
+		// TODO Remove this to use cross over.
+		child.car.driver.Init(Timer.Instance.durationSec * 1000);
+		child.car.driver.GenerateAllMoves();
+		// TODO Make this not cause an arguement out of bounds exception.
+		// TODO mcreate temporary drivers so that parents do not get overwritten
+		//CrossOverDriver(parent1, parent2, child);
+		// TODO Mutate Driver
 		return child;
 	}
 
@@ -180,6 +191,20 @@ public class GenomeGenerator : MonoBehaviour
 		child.car.topSpeed = statChild[0];
 		child.car.acceleration = statChild[1];
 		child.car.handling = statChild[2];
+	}
+
+	private void CrossOverDriver(Genome parent1, Genome parent2, Genome child) {
+		child.car.driver.Init(Timer.Instance.durationSec * 1000);
+		int numSteps = child.car.driver.numSteps;
+		bool useParent2 = false;
+		for (int i = 0; i < numSteps; i++) {
+			GeneticMove parentMove = parent1.car.driver.moves[i];
+			if (useParent2) {
+				parentMove = parent2.car.driver.moves[i];
+			}
+			useParent2 = !useParent2;
+			child.car.driver.moves.Add(parentMove);
+		}
 	}
 
 	private void MutateStats(Genome child) {

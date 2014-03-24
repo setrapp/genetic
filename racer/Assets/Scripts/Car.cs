@@ -30,28 +30,17 @@ public class Car : MonoBehaviour {
 	public float distance = 0.0f;
 	public int lapCount = 0;
 
+	// Car Driver
+	public GeneticDriver driver;
+
 	void Start() {
 		startingPos = transform.position;
 		startingRot = transform.rotation;
 		startingSca = transform.localScale;
+		//driver = GetComponent<GeneticDriver>();
 	}
 
 	void Update () {
-		// Accelerate
-		//if (Input.GetAxis("Vertical") > 0) {
-			velocity += Vector3.up * (acceleration * accelerationScale * Time.deltaTime);
-			if (velocity.sqrMagnitude > (topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) {
-				velocity = Vector3.up * topSpeed * topSpeedScale;
-			}
-		//}
-		// Deccelerate
-		/*else if (Input.GetAxis("Vertical") < 0) {
-			velocity -= Vector3.up * (handling * handlingBrakeScale * Time.deltaTime);
-			if (Vector3.Dot(velocity, Vector3.up) < 0) {
-				velocity = Vector3.zero;
-			}
-		}*/
-
 		// Friction
 		if (IsOnTrack()) {
 			velocity *= onTrackFriction;
@@ -59,14 +48,30 @@ public class Car : MonoBehaviour {
 			velocity *= offTrackFriction;
 		}
 
-		// Turn
-		if (Input.GetAxis("Horizontal") != 0) {
-			transform.Rotate(0, 0, handling * handlingTurnScale * -Input.GetAxis("Horizontal") * Time.deltaTime);
-		}
-
 		// Apply velocity
 		transform.Translate(velocity * Time.deltaTime);
 		distance += velocity.magnitude * Time.deltaTime;
+	}
+
+	public void Accelerate(bool decelerate) {
+		// Accelerate
+		if (!decelerate) {
+			velocity += Vector3.up * (acceleration * accelerationScale * Time.deltaTime);
+			if (velocity.sqrMagnitude > (topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) {
+				velocity = Vector3.up * topSpeed * topSpeedScale;
+			}
+		}
+		// Decelerate
+		else {
+			velocity -= Vector3.up * (handling * handlingBrakeScale * Time.deltaTime);
+			if (Vector3.Dot(velocity, Vector3.up) < 0) {
+				velocity = Vector3.zero;
+			}
+		}
+	}
+
+	public void Turn(int direction) {
+		transform.Rotate(0, 0, handling * handlingTurnScale * direction * Time.deltaTime);
 	}
 
 	private bool IsOnTrack() {

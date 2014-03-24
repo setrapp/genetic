@@ -3,7 +3,7 @@ using System.Collections;
 
 public class StatsController : MonoBehaviour {
 	// Car
-	public Car car;
+	//public Car car;
 	public int topSpeed;
 	public int acceleration;
 	public int handling;

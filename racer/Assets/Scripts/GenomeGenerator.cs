@@ -55,7 +55,7 @@ public class GenomeGenerator : MonoBehaviour
 			RandomizeStats(cars[i]);
 			population.Add(new Genome());
 			float color = (float)i / (membersInGeneration - 1);
-			cars[i].renderer.material.color = new Color(color, color, color, 1);
+			cars[i].numberText.text = "" + (i + 1);
 			cars[i].driver.SeedRandom(driverSeed + i);
 			cars[i].driver.Init(Timer.Instance.durationSec * 1000);
 			cars[i].driver.GenerateAllMoves();
@@ -70,7 +70,7 @@ public class GenomeGenerator : MonoBehaviour
 	void Update() {
 		winningCarIndex = 0;
 		for (int i = 1; i < cars.Count; i++) {
-			if (cars[i].distance > cars[winningCarIndex].distance) {
+			if (cars[i].Fitness > cars[winningCarIndex].Fitness) {
 				winningCarIndex = i;
 			}
 		}
@@ -80,16 +80,9 @@ public class GenomeGenerator : MonoBehaviour
 	public void TimerDone() {
 		// Record fitness.
 		for (int i = 0; i < membersInGeneration; i++) {
-			population[i].fitness = (int)(cars[i].distance * cars[i].distance * 1000);
-			/*Debug.Log("" + population[i].fitness + ": " + 
-			          cars[i].topSpeed + " " + 
-			          cars[i].acceleration + " " + 
-			          cars[i].handling + " " + 
-			          (cars[i].topSpeed + cars[i].acceleration + cars[i].handling));
-			*/
+			population[i].endingFitness = cars[i].Fitness;
 			cars[i].ResetCar();
 		}
-		//Debug.Log("----------");
 		CreateNextGeneration();
 		currentGeneration++;
 		if (currentGeneration >= generationMax) {
@@ -134,7 +127,7 @@ public class GenomeGenerator : MonoBehaviour
 		for (int i = 0; i < population.Count; i++) {
 			reproductionRanges[i] = new ReproductionRange();
 			reproductionRanges[i].min = rangeMin;
-			reproductionRanges[i].max = rangeMin + population[i].fitness;
+			reproductionRanges[i].max = rangeMin + population[i].endingFitness;
 			rangeMin = reproductionRanges[i].max;
 		}
 		return reproductionRanges;
@@ -314,7 +307,7 @@ public class GenomeGenerator : MonoBehaviour
 			float actionType = (float)genomeRandom.NextDouble();
 			float actionDirection = (float)genomeRandom.NextDouble();
 			for (int i = changeMoveStart; i < changeMoveEnd; i++) {
-				if (actionType < 0.5f) {
+				if (actionType < 0.2f) {
 					if (child.car.driver.moves[i].turnLeft || child.car.driver.moves[i].turnRight) {
 						child.car.driver.moves[i].turnLeft = false;
 						child.car.driver.moves[i].turnRight = false;
@@ -364,7 +357,7 @@ public class GenomeGenerator : MonoBehaviour
 public class Genome {
 	public Car car;
 	public List<GeneticMove> moves;
-	public int fitness;
+	public int endingFitness;
 }
 
 public class ReproductionRange {

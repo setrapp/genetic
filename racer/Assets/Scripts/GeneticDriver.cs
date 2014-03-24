@@ -19,8 +19,9 @@ public class GeneticDriver : MonoBehaviour
 		milliSinceStep += (int)(Time.deltaTime * 1000);
 		if (milliSinceStep >= timeStepMilli) {
 			milliSinceStep = 0;
-			ReadNextMove();
+			currentMove++;
 		}
+		ReadCurrentMove();
 	}
 
 	public void SeedRandom(int seed) {
@@ -65,7 +66,11 @@ public class GeneticDriver : MonoBehaviour
 		}
 	}
 
-	private void ReadNextMove() {
+	private void ReadCurrentMove() {
+		if (currentMove < 0 || currentMove >= moves.Count) {
+			return;
+		}
+
 		// Acceleration
 		if (moves[currentMove].accelerate) {
 			car.Accelerate(true);

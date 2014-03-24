@@ -28,22 +28,31 @@ public class Car : MonoBehaviour {
 
 	// Progession
 	public float distance = 0.0f;
+	public float distanceOnTrack = 0.0f;
+	public float timeOnTrack = 0.0f;
 	public int lapCount = 0;
 
-	// Car Driver
 	public GeneticDriver driver;
+	public TextMesh numberText;
+	public int Fitness {
+		get {
+			//float onTrackProportion = (distanceOnTrack / distance);
+			return (int)(distance * distanceOnTrack * timeOnTrack);
+		}
+	}
 
 	void Start() {
 		startingPos = transform.position;
 		startingRot = transform.rotation;
 		startingSca = transform.localScale;
-		//driver = GetComponent<GeneticDriver>();
 	}
 
 	void Update () {
-		// Friction
+		// Check if on track.
+		bool onTrack = false;
 		if (IsOnTrack()) {
 			velocity *= onTrackFriction;
+			onTrack = true;
 		} else {
 			velocity *= offTrackFriction;
 		}
@@ -51,6 +60,10 @@ public class Car : MonoBehaviour {
 		// Apply velocity
 		transform.Translate(velocity * Time.deltaTime);
 		distance += velocity.magnitude * Time.deltaTime;
+		if (onTrack) {
+			distanceOnTrack += velocity.magnitude * Time.deltaTime;
+			timeOnTrack += Time.deltaTime;
+		}
 	}
 
 	public void Accelerate(bool decelerate) {

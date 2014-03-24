@@ -16,6 +16,8 @@ public class GenomeGenerator : MonoBehaviour
 
 	public bool done = false;
 	public List<Car> cars;
+	public Car winningCar;
+	public int winningCarIndex;
 	public StatsController statsController;
 	private List<Genome> population;
 
@@ -35,7 +37,6 @@ public class GenomeGenerator : MonoBehaviour
 	public int generationMax;
 	public int currentGeneration;
 	public int membersInGeneration;
-	//public int currentMember;
 
 	void Start() {
 		done = false;
@@ -47,11 +48,24 @@ public class GenomeGenerator : MonoBehaviour
 			int newTopSpeed, newAcceleration, newHandling;
 			RandomizeStats(cars[i]);
 			population.Add(new Genome());
+			float color = (float)i / (membersInGeneration - 1);
+			Debug.Log (color);
+			cars[i].renderer.material.color = new Color(color, color, color, 1);
 			population[i].car = cars[i];
 		}
 		currentGeneration = 0;
-		//currentMember = 0;
-		ApplyStats();
+		winningCarIndex = 0;
+		winningCar = cars[winningCarIndex];
+	}
+
+	void Update() {
+		winningCarIndex = 0;
+		for (int i = 1; i < cars.Count; i++) {
+			if (cars[i].distance > cars[winningCarIndex].distance) {
+				winningCarIndex = i;
+			}
+		}
+		winningCar = cars[winningCarIndex];
 	}
 
 	public void TimerDone() {
@@ -64,22 +78,16 @@ public class GenomeGenerator : MonoBehaviour
 			          cars[i].handling + " " + 
 			          (cars[i].topSpeed + cars[i].acceleration + cars[i].handling));
 
-			// Start next car.
-			//currentMember++;
 			cars[i].ResetCar();
 		}
-		//if (currentMember >= membersInGeneration) {
-			Debug.Log("----------");
-			CreateNextGeneration();
-			currentGeneration++;
-			//currentMember = 0;
-			if (currentGeneration >= generationMax) {
-				done = true;
-			}
-		//}
+		Debug.Log("----------");
+		CreateNextGeneration();
+		currentGeneration++;
+		if (currentGeneration >= generationMax) {
+			done = true;
+		}
 
 		if (!done) {
-			ApplyStats();
 			SendMessage("ResetTimer");
 		} else {
 			for (int i = 0; i < membersInGeneration; i++) {
@@ -222,14 +230,6 @@ public class GenomeGenerator : MonoBehaviour
 			car.acceleration -= statFix;
 			car.handling = car.statPoolSize - (car.topSpeed + car.acceleration);
 		}
-	}
-
-	private void ApplyStats() {
-		// TODO Use the stats of the best car of the generation.
-		statsController.topSpeed = cars[0].topSpeed;
-		statsController.acceleration = cars[0].acceleration;
-		statsController.handling = cars[0].handling;
-		statsController.ApplyStats ();
 	}
 }
 

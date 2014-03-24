@@ -11,7 +11,7 @@ public class TrackInfoController : MonoBehaviour
 	void Update() {
 		timeText.text = Timer.Instance.timeString;
 		generationText.text = "" + (GenomeGenerator.Instance.currentGeneration + 1);
-		//memberText.text = "" + (GenomeGenerator.Instance.currentMember + 1) + " / " + GenomeGenerator.Instance.membersInGeneration;
+		memberText.text = "" + (GenomeGenerator.Instance.winningCarIndex + 1);
 	}
 }
 

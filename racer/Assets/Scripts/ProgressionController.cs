@@ -5,13 +5,13 @@ public class ProgressionController : MonoBehaviour
 {
 	// GUI Display
 	public GUIText distanceText;
-	public GUIText trackDistText;
+	public GUIText fitnessText;
 	public GUIText lapCountText;
 
 	void Update() {
 		Car winningCar = GenomeGenerator.Instance.winningCar;
 		distanceText.text = "" + winningCar.distance;
-		trackDistText.text = "" + (int)winningCar.timeOnTrack;
+		fitnessText.text = "" + (int)winningCar.Fitness;
 		lapCountText.text = "" + winningCar.lapCount;
 	}
 }

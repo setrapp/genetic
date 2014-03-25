@@ -1,9 +1,7 @@
-*.sln
 *.userprefs
-*.csproj
 *.pidb
 *.unityproj
 .DS_Store
-*/Library
-*/obj
-*/Temp
+/racer/Library
+/racer/obj
+/racer/Temp

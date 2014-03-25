@@ -13,7 +13,7 @@ public class GeneticDriver : MonoBehaviour
 	public float decelerateRate = 0.5f;
 	public float turnRate = 0.5f;
 	public List<GeneticMove> moves;
-	private int currentMove = 0;
+	public int currentMove = 0;
 
 	void Update() {
 		milliSinceStep += (int)(Time.deltaTime * 1000);

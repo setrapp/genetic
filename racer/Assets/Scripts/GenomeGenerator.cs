@@ -38,11 +38,15 @@ public class GenomeGenerator : MonoBehaviour
 	public float flipMoveRate = 0.2f;
 	public float enableMoveRate = 0.4f;
 	public float randomizeMoveRate = 0.2f;
+	public float copyMoveRate = 0.2f;
 
 	// Generation Constants
 	public int generationMax;
 	public int currentGeneration;
 	public int membersInGeneration;
+	public float statCrossoverRate = 0.7f;
+	public float moveCrossoverRate = 0.7f;
+	public float catastropheRate = 0.1f;
 
 	void Start() {
 		done = false;
@@ -92,15 +96,15 @@ public class GenomeGenerator : MonoBehaviour
 		if (!done) {
 			SendMessage("ResetTimer");
 		} else {
-			for (int i = 0; i < membersInGeneration; i++) {
+			/*for (int i = 0; i < membersInGeneration; i++) {
 				cars[i].gameObject.SetActive(false);
-			}
+			}*/
 		}
 	}
 
 	private void CreateNextGeneration() {
 		List<Genome> newPopulation = new List<Genome>();
-
+		float avgFitness = 0;
 		// Copy parent drivers to avoid overwriting them.
 		for (int i = 0; i < membersInGeneration; i++) {
 			List<GeneticMove> newMoves = new List<GeneticMove>();
@@ -108,15 +112,31 @@ public class GenomeGenerator : MonoBehaviour
 				newMoves.Add(population[i].moves[j]);
 			}
 			population[i].moves = newMoves;
+			avgFitness += population[i].car.Fitness;
 		}
+		avgFitness /= membersInGeneration;
+
+		// Occasionally, eliminate poor performing cars and introduce random new ones.
+		/*if ((float)genomeRandom.NextDouble() < catastropheRate) {
+			float minFitness = avgFitness / 4;
+			for (int i = 0; i < population.Count; i++) {
+				if (population[i].car.distanceOnTrack < minFitness) {
+					RandomizeStats(population[i].car);
+					population[i].car.driver.GenerateAllMoves();
+				}
+			}
+		}*/
 
 		ReproductionRange[] reproductionRanges = WeightParents();
-		for (int i = 0; i < membersInGeneration; i++) {
+		for (int i = 0; i < membersInGeneration; i += 2) {
 			int parentIndex1 = PickParent(reproductionRanges);
 			int parentIndex2 = PickParent(reproductionRanges, parentIndex1);
 			Genome parent1 = population[parentIndex1];
 			Genome parent2 = population[parentIndex2];
-			newPopulation.Add(CreateChild(parent1, parent2, i));
+			bool crossoverStat = (float)genomeRandom.NextDouble() < statCrossoverRate;
+			bool crossoverMove = (float)genomeRandom.NextDouble() < moveCrossoverRate;
+			newPopulation.Add(CreateChild(parent1, parent2, i, crossoverStat, crossoverMove));
+			newPopulation.Add(CreateChild(parent2, parent1, i + 1, crossoverStat, crossoverMove));
 		}
 		population = newPopulation;
 	}
@@ -153,24 +173,24 @@ public class GenomeGenerator : MonoBehaviour
 		return parentIndex;
 	}
 
-	private Genome CreateChild(Genome parent1, Genome parent2, int memberIndex) {
+	private Genome CreateChild(Genome parent1, Genome parent2, int memberIndex, bool crossoverStat, bool crossoverMove) {
 		Genome child = new Genome();
 		child.car = cars[memberIndex];
 		child.moves = child.car.driver.moves;
 
 		// Stats
-		CrossOverStats(parent1, parent2, child);
+		CrossOverStats(parent1, parent2, child, crossoverStat);
 		if ((float)genomeRandom.NextDouble() < statMutationRate) {
 			MutateStats(child);
 		}
 
 		// Driver
-		CrossOverDriver(parent1, parent2, child);
+		CrossOverDriver(parent1, parent2, child, crossoverMove);
 		// TODO Mutate Driver
 		return child;
 	}
 
-	private void CrossOverStats(Genome parent1, Genome parent2, Genome child) {
+	private void CrossOverStats(Genome parent1, Genome parent2, Genome child, bool crossoverStat) {
 		// Serialize parent genomes.
 		int[] stat1 = new int[]{parent1.car.topSpeed, parent1.car.acceleration, parent1.car.handling};
 		int[] stat2 = new int[]{parent2.car.topSpeed, parent2.car.acceleration, parent2.car.handling};
@@ -184,10 +204,16 @@ public class GenomeGenerator : MonoBehaviour
 		}
 		int thirdPriority = 3 - firstPriority - secondPriority;
 
-		// Take each stat from the parent with more of it.
-		statChild[firstPriority] = Mathf.Max(stat1[firstPriority], stat2[firstPriority]);
-		statChild[secondPriority] = Mathf.Max(stat1[secondPriority], stat2[secondPriority]);
-		statChild[thirdPriority] = Mathf.Max(stat1[thirdPriority], stat2[thirdPriority]);
+		if (!crossoverStat) {
+			statChild[firstPriority] = stat1[firstPriority];
+			statChild[secondPriority] = stat1[secondPriority];
+			statChild[thirdPriority] = stat1[thirdPriority];
+		} else {
+			// If crossing over, take each stat from the parent with more of it.
+			statChild[firstPriority] = Mathf.Max(stat1[firstPriority], stat2[firstPriority]);
+			statChild[secondPriority] = Mathf.Max(stat1[secondPriority], stat2[secondPriority]);
+			statChild[thirdPriority] = Mathf.Max(stat1[thirdPriority], stat2[thirdPriority]);
+		}
 
 		// Fix stats to stay within stat pool size. Preserve the most important stat.
 		int statPoolMax = (parent1.car.statPoolSize + parent2.car.statPoolSize) / 2;
@@ -201,13 +227,13 @@ public class GenomeGenerator : MonoBehaviour
 		child.car.handling = statChild[2];
 	}
 
-	private void CrossOverDriver(Genome parent1, Genome parent2, Genome child) {
+	private void CrossOverDriver(Genome parent1, Genome parent2, Genome child, bool crossoverMove) {
 		child.car.driver.Init(Timer.Instance.durationSec * 1000);
 		int numSteps = child.car.driver.numSteps;
 		bool useParent2 = false;
 		for (int i = 0; i < numSteps; i++) {
 			GeneticMove parentMove = parent1.moves[i];
-			if (useParent2) {
+			if (useParent2 && crossoverMove) {
 				parentMove = parent2.moves[i];
 			}
 			useParent2 = !useParent2;
@@ -261,18 +287,22 @@ public class GenomeGenerator : MonoBehaviour
 		flipMoveRate = flipMoveRate + swapMoveRate;
 		enableMoveRate = enableMoveRate + flipMoveRate;
 		randomizeMoveRate = randomizeMoveRate + enableMoveRate;
+		copyMoveRate = copyMoveRate + randomizeMoveRate;
 
 		//Determine how many moves to alter and where to start.
-		int changeMoveCount = genomeRandom.Next(0, child.car.driver.moves.Count);
+		/*int changeMoveCount = genomeRandom.Next(0, child.car.driver.moves.Count);
 		int changeMoveStart = genomeRandom.Next(0, child.car.driver.moves.Count);
 		if (changeMoveStart + changeMoveCount >= child.car.driver.moves.Count - 1) {
 			changeMoveStart = child.car.driver.moves.Count - changeMoveCount;
 		}
-		int changeMoveEnd = changeMoveStart + changeMoveCount;
+		int changeMoveEnd = changeMoveStart + changeMoveCount;*/
+		int moveCount = child.car.driver.moves.Count;
+		int changeMoveStart, changeMoveCount, changeMoveEnd;
 
 		float mutationType = (float)genomeRandom.NextDouble();
 		if (mutationType < swapMoveRate) {
 			// Swap a group of moves with another group.
+			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
 			int changeMoveHalfCount = changeMoveCount / 2;
 			int changeMoveHalfEnd = changeMoveStart + changeMoveHalfCount;
 			for (int i = 0; i < changeMoveHalfCount; i++) {
@@ -280,8 +310,12 @@ public class GenomeGenerator : MonoBehaviour
 				child.car.driver.moves[changeMoveStart + i] = child.car.driver.moves[changeMoveHalfEnd + i];
 				child.car.driver.moves[changeMoveHalfEnd + i] = tempMove;
 			}
-		} else if (mutationType < flipMoveRate) {
+		} 
+
+		mutationType = (float)genomeRandom.NextDouble();
+		if (mutationType < flipMoveRate) {
 			// Switch a type of action in a group of moves to the opposite direction.
+			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
 			float actionType = (float)genomeRandom.NextDouble();
 			for (int i = changeMoveStart; i < changeMoveEnd; i++) {
 				if (actionType < 0.5f) {
@@ -302,8 +336,12 @@ public class GenomeGenerator : MonoBehaviour
 					}
 				}
 			}
-		} else if (mutationType < enableMoveRate) {
+		} 
+
+		mutationType = (float)genomeRandom.NextDouble();
+		if (mutationType < enableMoveRate) {
 			// Turn one type of action in a groups of moves on or off.
+			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
 			float actionType = (float)genomeRandom.NextDouble();
 			float actionDirection = (float)genomeRandom.NextDouble();
 			for (int i = changeMoveStart; i < changeMoveEnd; i++) {
@@ -332,14 +370,51 @@ public class GenomeGenerator : MonoBehaviour
 				}
 			}
 
-		} else if (mutationType < randomizeMoveRate) {
+		}
+
+		mutationType = (float)genomeRandom.NextDouble();
+		if (mutationType < randomizeMoveRate) {
 			// Create chunks of moves randomly.
+			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
 			for (int i = changeMoveStart; i < changeMoveEnd; i++) {
 				child.car.driver.GenerateMove(i);
 			}
 		}
+
+		mutationType = (float)genomeRandom.NextDouble();
+		if (mutationType < copyMoveRate) {
+			// Copy moves across group sections.
+			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
+			int numSections = Mathf.Max(1, genomeRandom.Next(changeMoveCount / 8, changeMoveCount / 4));
+			int sectionSize = changeMoveCount / numSections;
+			int mod = 0;
+			GeneticMove copiedMove = child.car.driver.moves[changeMoveStart];
+			for (int i = changeMoveStart; i < changeMoveEnd; i++) {
+				if (mod == 0) {
+					copiedMove = child.car.driver.moves[i];
+				} else {
+					child.car.driver.moves[i].accelerate = copiedMove.accelerate;
+					child.car.driver.moves[i].decelerate = copiedMove.accelerate;
+					child.car.driver.moves[i].turnLeft = copiedMove.turnLeft;
+					child.car.driver.moves[i].turnRight = copiedMove.turnRight;
+				}
+				mod++;
+				if (mod >= numSections) {
+					mod = 0;
+				}
+			}
+		}
 	}
 
+	private void CalculateMoveCrossoverRange(int moveCount, out int changeMoveStart, out int changeMoveCount, out int changeMoveEnd) {
+		changeMoveCount = genomeRandom.Next(0, moveCount);
+		changeMoveStart = genomeRandom.Next(0, moveCount);
+		if (changeMoveStart + changeMoveCount >= moveCount - 1) {
+			changeMoveStart = moveCount - changeMoveCount;
+		}
+		changeMoveEnd = changeMoveStart + changeMoveCount;
+	}
+	
 	private void RandomizeStats(Car car) {
 		// Generate random stats that does not exceed stat pool.
 		car.topSpeed = car.statMin + statRandom.Next(0, car.statMax - car.statMin);

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class GeneticDriver : MonoBehaviour
 {
 	public Car car;
+	public int numStepsPerSec;
+	[HideInInspector]
 	public int numSteps;
 	private int timeStepMilli = 100;
 	private int milliSinceStep = 0;
@@ -15,7 +17,7 @@ public class GeneticDriver : MonoBehaviour
 	public List<GeneticMove> moves;
 	public int currentMove = 0;
 
-	void Update() {
+	void FixedUpdate() {
 		milliSinceStep += (int)(Time.deltaTime * 1000);
 		if (milliSinceStep >= timeStepMilli) {
 			milliSinceStep = 0;
@@ -30,13 +32,29 @@ public class GeneticDriver : MonoBehaviour
 
 	public void Init(int fullTimeMilli) {
 		moves = new List<GeneticMove>();
-		timeStepMilli = fullTimeMilli / numSteps;
+		if (numStepsPerSec <= 0) {
+			numStepsPerSec = GenomeGenerator.Instance.targetFrameRate;
+		}
+		numSteps = (int)(numStepsPerSec * fullTimeMilli / 1000.0f);
+		timeStepMilli = (int)(fullTimeMilli / (float)numSteps);
+
 		currentMove = 0;
 	}
 
 	public void GenerateAllMoves() {
+		moves.Clear();
 		for (int i = 0; i < numSteps; i++) {
 			moves.Add(new GeneticMove());
+			GenerateMove(i);
+		}
+	}
+
+	public void GenerateLaterMoves(float portionToKeep) {
+		int startingStep = (int)(numSteps * portionToKeep);
+		for (int i = startingStep; i < numSteps; i++) {
+			if (moves.Count < i + 1) {
+				moves.Add(new GeneticMove());
+			}
 			GenerateMove(i);
 		}
 	}
@@ -44,8 +62,8 @@ public class GeneticDriver : MonoBehaviour
 	public void GenerateMove(int moveIndex) {
 		moves[moveIndex].accelerate = false;
 		moves[moveIndex].decelerate = false;
-		moves[moveIndex].accelerate = false;
-		moves[moveIndex].decelerate = false;
+		moves[moveIndex].turnLeft = false;
+		moves[moveIndex].turnRight = false;
 
 		// Determine if car should change speed.
 		if ((float)random.NextDouble() < accelerateRate) {
@@ -84,6 +102,21 @@ public class GeneticDriver : MonoBehaviour
 		} else if (moves[currentMove].turnRight) { 
 			car.Turn(-1);
 		}
+
+	}
+
+	public float SimilarityToMoveList(List<GeneticMove> targetMoves) {
+		float similarity = 0;
+		for (int i = 0; i < targetMoves.Count && i < moves.Count; i++) {
+			if (moves[i].accelerate == targetMoves[i].accelerate && moves[i].decelerate == targetMoves[i].decelerate) {
+				similarity += 0.5f;
+			}
+			if (moves[i].turnLeft == targetMoves[i].turnLeft && moves[i].turnRight == targetMoves[i].turnRight) {
+				similarity += 0.5f;
+			}
+		}
+		similarity /= Mathf.Max(targetMoves.Count, moves.Count);
+		return similarity;
 	}
 }
 

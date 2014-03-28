@@ -14,7 +14,11 @@ public class GenomeGenerator : MonoBehaviour
 		}
 	}
 
+	[HideInInspector]
+	public int targetFrameRate = 60;
+	public float timeScaling = 1;
 	public bool done = false;
+	[HideInInspector]
 	public List<Car> cars;
 	public Car winningCar;
 	public int winningCarIndex;
@@ -44,14 +48,25 @@ public class GenomeGenerator : MonoBehaviour
 	public int generationMax;
 	public int currentGeneration;
 	public int membersInGeneration;
+	public float elitePortion = 0.1f;
 	public float statCrossoverRate = 0.7f;
 	public float moveCrossoverRate = 0.7f;
+	public float moveSecondParentRate = 0.3f;
 	public float catastropheRate = 0.1f;
+	public float dangerousCloneCount = 4;
+	public float dangerousSimilarity = 0.7f;
 
 	void Start() {
+		targetFrameRate = (int)(60 * timeScaling);
+		Application.targetFrameRate = targetFrameRate;
 		done = false;
 		genomeRandom = new System.Random(genomeSeed);
 		statRandom = new System.Random(statSeed);
+		cars.Clear();
+		GameObject[] carObjects = GameObject.FindGameObjectsWithTag("Car");
+		for (int i = 0; i < carObjects.Length; i++) {
+			cars.Add(carObjects[i].GetComponent<Car>());
+		}
 		membersInGeneration = cars.Count;
 		population = new List<Genome>();
 		for (int i = 0; i < membersInGeneration; i++) {
@@ -85,9 +100,13 @@ public class GenomeGenerator : MonoBehaviour
 		// Record fitness.
 		for (int i = 0; i < membersInGeneration; i++) {
 			population[i].endingFitness = cars[i].Fitness;
-			cars[i].ResetCar();
 		}
+
 		CreateNextGeneration();
+		for (int i = 0; i < membersInGeneration; i++) {
+			cars[i].ResetCar();
+			//cars[i].driver.currentMove = 0;
+		}
 		currentGeneration++;
 		if (currentGeneration >= generationMax) {
 			done = true;
@@ -127,8 +146,76 @@ public class GenomeGenerator : MonoBehaviour
 			}
 		}*/
 
+		// Store a list of elite cars.
+		List<Genome> elites = new List<Genome>();
+		int eliteCount = (int)(population.Count * elitePortion);
+		for (int i = 0; i < population.Count; i++) {
+			bool addToElites = false;
+			if (elites.Count < eliteCount || population[i].car.Fitness > elites[elites.Count - 1].car.Fitness) {
+				addToElites = true;
+			} else {
+				population[i].elite =false;
+			}
+
+			if (addToElites) {
+				bool elitePlaced = false;
+				for (int j = 0; j < elites.Count && !elitePlaced; j++) {
+					if (population[i].car.Fitness > elites[j].car.Fitness) {
+						elites.Insert(j, population[i]);
+						population[i].elite = true;
+						elitePlaced = true;
+					}
+				}
+				if (!elitePlaced) {
+					elites.Add(population[i]);
+					population[i].elite = true;
+				}
+				if (elites.Count > eliteCount) {
+					elites[elites.Count - 1].elite = false;
+					elites.RemoveAt(elites.Count - 1);
+				}
+			}
+		}
+
+		// Attempt to introduce diversity by altering cars that are too similar.
+		/*int statCloneCount = 0, moveCloneCount = 0;
+		for (int i = 0; i < membersInGeneration; i++) {
+			for(int j = i + 1; j < membersInGeneration; j++) {
+				if (!population[j].elite) {
+					// Stat Similarity
+					float statSimilarity = SimilarityToStats(population[i], population[j]);
+					if (statSimilarity > dangerousSimilarity) {
+						if (statCloneCount >= dangerousCloneCount) {
+							RandomizeStats(population[i].car);
+						} else {
+							statCloneCount++;
+						}
+					}
+
+					// Move Similarity
+					float moveSimilarity = population[j].car.driver.SimilarityToMoveList(population[i].car.driver.moves);
+					if (moveSimilarity > dangerousSimilarity) {
+						if (moveCloneCount >= dangerousCloneCount) {
+							population[i].car.driver.GenerateAllMoves();
+							//float saveMovePortion = (float)genomeRandom.NextDouble();
+							//saveMovePortion *= (population[j].car.timeOnTrack / population[j].car.timeRacing);
+							//population[i].car.driver.GenerateLaterMoves(saveMovePortion);
+						} else {
+							moveCloneCount++;
+						}
+					}
+				}
+			}
+		}*/
+
+		// Save elites.
+		for (int i = 0; i < elites.Count; i++) {
+			newPopulation.Add(CreateChild(elites[i], elites[i], i, false, false, true));
+		}
+
+		// Generate next generation.
 		ReproductionRange[] reproductionRanges = WeightParents();
-		for (int i = 0; i < membersInGeneration; i += 2) {
+		for (int i = newPopulation.Count; i < membersInGeneration; i += 2) {
 			int parentIndex1 = PickParent(reproductionRanges);
 			int parentIndex2 = PickParent(reproductionRanges, parentIndex1);
 			Genome parent1 = population[parentIndex1];
@@ -136,7 +223,9 @@ public class GenomeGenerator : MonoBehaviour
 			bool crossoverStat = (float)genomeRandom.NextDouble() < statCrossoverRate;
 			bool crossoverMove = (float)genomeRandom.NextDouble() < moveCrossoverRate;
 			newPopulation.Add(CreateChild(parent1, parent2, i, crossoverStat, crossoverMove));
-			newPopulation.Add(CreateChild(parent2, parent1, i + 1, crossoverStat, crossoverMove));
+			if (newPopulation.Count < membersInGeneration) {
+				newPopulation.Add(CreateChild(parent2, parent1, i + 1, crossoverStat, crossoverMove));
+			}
 		}
 		population = newPopulation;
 	}
@@ -173,20 +262,57 @@ public class GenomeGenerator : MonoBehaviour
 		return parentIndex;
 	}
 
-	private Genome CreateChild(Genome parent1, Genome parent2, int memberIndex, bool crossoverStat, bool crossoverMove) {
+	private Genome CreateChild(Genome parent1, Genome parent2, int memberIndex, bool crossoverStat, bool crossoverMove, bool isElite = false) {
 		Genome child = new Genome();
 		child.car = cars[memberIndex];
 		child.moves = child.car.driver.moves;
+
+		if (isElite) {
+			child.elite = true;
+			return child;
+		}
 
 		// Stats
 		CrossOverStats(parent1, parent2, child, crossoverStat);
 		if ((float)genomeRandom.NextDouble() < statMutationRate) {
 			MutateStats(child);
 		}
+		// Keep stats at least at minimum
+		if (child.car.topSpeed < child.car.statMin) {
+			int neededPoints = child.car.statMin - child.car.topSpeed;
+			child.car.topSpeed += neededPoints;
+			if (child.car.acceleration > child.car.handling) {
+				child.car.acceleration -= neededPoints;
+			} else {
+				child.car.handling -= neededPoints;
+			}
+		}
+		if (child.car.acceleration < child.car.statMin) {
+			int neededPoints = child.car.statMin - child.car.acceleration;
+			child.car.acceleration += neededPoints;
+			if (child.car.topSpeed > child.car.handling) {
+				child.car.topSpeed -= neededPoints;
+			} else {
+				child.car.handling -= neededPoints;
+			}
+		}
+		if (child.car.handling < child.car.statMin) {
+			int neededPoints = child.car.statMin - child.car.handling;
+			child.car.handling += neededPoints;
+			if (child.car.topSpeed > child.car.acceleration) {
+				child.car.topSpeed -= neededPoints;
+			} else {
+				child.car.acceleration -= neededPoints;
+			}
+		}
+
 
 		// Driver
 		CrossOverDriver(parent1, parent2, child, crossoverMove);
-		// TODO Mutate Driver
+		if ((float)genomeRandom.NextDouble() < moveMutationRate) {
+			MutateDriver(child);
+		}
+		//child.moves = child.car.driver.moves;
 		return child;
 	}
 
@@ -236,7 +362,7 @@ public class GenomeGenerator : MonoBehaviour
 			if (useParent2 && crossoverMove) {
 				parentMove = parent2.moves[i];
 			}
-			useParent2 = !useParent2;
+			useParent2 = genomeRandom.NextDouble() < moveSecondParentRate;
 			child.car.driver.moves.Add(parentMove);
 		}
 		child.moves = child.car.driver.moves;
@@ -244,11 +370,12 @@ public class GenomeGenerator : MonoBehaviour
 
 	private void MutateStats(Genome child) {
 		// Chain rates together in ranges.
-		shareStatRate = shareStatRate + swapStatRate;
-		randomizeStatRate = randomizeStatRate + shareStatRate;
+		float internalSwapStatRate = swapStatRate;
+		float internalShareStatRate = shareStatRate + swapStatRate;
+		float internalRandomizeStatRate = randomizeStatRate + shareStatRate;
 
 		float mutationType = (float)genomeRandom.NextDouble();
-		if (mutationType < swapStatRate) {
+		if (mutationType < internalSwapStatRate) {
 			// Swap two stats.
 			int[] statChild = new int[]{child.car.topSpeed, child.car.acceleration, child.car.handling};
 			int swap1 = statRandom.Next(0, 3);
@@ -262,7 +389,7 @@ public class GenomeGenerator : MonoBehaviour
 			child.car.topSpeed = statChild[0];
 			child.car.acceleration = statChild[1];
 			child.car.handling = statChild[2];
-		} else if (mutationType < shareStatRate) {
+		} else if (mutationType < internalShareStatRate) {
 			// Move half of one stat to another.
 			int[] statChild = new int[]{child.car.topSpeed, child.car.acceleration, child.car.handling};
 			int share1 = statRandom.Next(0, 3);
@@ -276,7 +403,7 @@ public class GenomeGenerator : MonoBehaviour
 			child.car.topSpeed = statChild[0];
 			child.car.acceleration = statChild[1];
 			child.car.handling = statChild[2];
-		} else if (mutationType < randomizeStatRate) {
+		} else if (mutationType < internalRandomizeStatRate) {
 			// Create a new random set of stats.
 			RandomizeStats(child.car);
 		}
@@ -284,10 +411,11 @@ public class GenomeGenerator : MonoBehaviour
 
 	private void MutateDriver(Genome child) {
 		// Chain rates together in ranges.
-		flipMoveRate = flipMoveRate + swapMoveRate;
-		enableMoveRate = enableMoveRate + flipMoveRate;
-		randomizeMoveRate = randomizeMoveRate + enableMoveRate;
-		copyMoveRate = copyMoveRate + randomizeMoveRate;
+		float internalSwapMoveRate = swapMoveRate;
+		float internalFlipMoveRate = flipMoveRate + swapMoveRate;
+		float internalEnableMoveRate = enableMoveRate + flipMoveRate;
+		float internalRandomizeMoveRate = randomizeMoveRate + enableMoveRate;
+		float internalCopyMoveRate = copyMoveRate + randomizeMoveRate;
 
 		//Determine how many moves to alter and where to start.
 		/*int changeMoveCount = genomeRandom.Next(0, child.car.driver.moves.Count);
@@ -300,7 +428,7 @@ public class GenomeGenerator : MonoBehaviour
 		int changeMoveStart, changeMoveCount, changeMoveEnd;
 
 		float mutationType = (float)genomeRandom.NextDouble();
-		if (mutationType < swapMoveRate) {
+		if (mutationType < internalSwapMoveRate) {
 			// Swap a group of moves with another group.
 			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
 			int changeMoveHalfCount = changeMoveCount / 2;
@@ -313,7 +441,7 @@ public class GenomeGenerator : MonoBehaviour
 		} 
 
 		mutationType = (float)genomeRandom.NextDouble();
-		if (mutationType < flipMoveRate) {
+		if (mutationType < internalFlipMoveRate) {
 			// Switch a type of action in a group of moves to the opposite direction.
 			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
 			float actionType = (float)genomeRandom.NextDouble();
@@ -339,7 +467,7 @@ public class GenomeGenerator : MonoBehaviour
 		} 
 
 		mutationType = (float)genomeRandom.NextDouble();
-		if (mutationType < enableMoveRate) {
+		if (mutationType < internalEnableMoveRate) {
 			// Turn one type of action in a groups of moves on or off.
 			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
 			float actionType = (float)genomeRandom.NextDouble();
@@ -373,7 +501,7 @@ public class GenomeGenerator : MonoBehaviour
 		}
 
 		mutationType = (float)genomeRandom.NextDouble();
-		if (mutationType < randomizeMoveRate) {
+		if (mutationType < internalRandomizeMoveRate) {
 			// Create chunks of moves randomly.
 			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
 			for (int i = changeMoveStart; i < changeMoveEnd; i++) {
@@ -382,7 +510,7 @@ public class GenomeGenerator : MonoBehaviour
 		}
 
 		mutationType = (float)genomeRandom.NextDouble();
-		if (mutationType < copyMoveRate) {
+		if (mutationType < internalCopyMoveRate) {
 			// Copy moves across group sections.
 			CalculateMoveCrossoverRange (moveCount, out changeMoveStart, out changeMoveCount, out changeMoveEnd);
 			int numSections = Mathf.Max(1, genomeRandom.Next(changeMoveCount / 8, changeMoveCount / 4));
@@ -414,6 +542,13 @@ public class GenomeGenerator : MonoBehaviour
 		}
 		changeMoveEnd = changeMoveStart + changeMoveCount;
 	}
+
+	private float SimilarityToStats(Genome target, Genome test) {
+		float topSpeedSimilarity = 1.0f - Mathf.Abs((target.car.topSpeed - test.car.topSpeed) / (float)target.car.topSpeed);
+		float accelerationSimilarity = 1.0f - Mathf.Abs((target.car.acceleration - test.car.acceleration) / (float)target.car.acceleration);
+		float handlingSimilarity = 1.0f - Mathf.Abs((target.car.handling - test.car.handling) / (float)target.car.handling);
+		return (topSpeedSimilarity / 3) + (accelerationSimilarity / 3) + (handlingSimilarity / 3);
+	}
 	
 	private void RandomizeStats(Car car) {
 		// Generate random stats that does not exceed stat pool.
@@ -433,6 +568,7 @@ public class Genome {
 	public Car car;
 	public List<GeneticMove> moves;
 	public int endingFitness;
+	public bool elite;
 }
 
 public class ReproductionRange {

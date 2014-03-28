@@ -16,6 +16,7 @@ public class Car : MonoBehaviour {
 	public int statMax;
 
 	// Stat Conversions
+	public float statScale = 1;
 	public float topSpeedScale = 1;
 	public float accelerationScale = 1;
 	public float handlingBrakeScale = 1;
@@ -31,6 +32,7 @@ public class Car : MonoBehaviour {
 	public float distanceOnTrack = 0.0f;
 	public float timeOnTrack = 0.0f;
 	public float timeRacing = 0.0f;
+	public float timeAtTopSpeed = 0;
 	public int lapCount = 0;
 	public Vector3 lastTrackPos;
 
@@ -39,8 +41,13 @@ public class Car : MonoBehaviour {
 	public int Fitness {
 		get {
 			//float onTrackProportion = (distanceOnTrack / distance);
-			return Mathf.Max(1, (int)(distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack)) * 10));
+			//return Mathf.Max(1, (int)(distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack)) * 10));
 			//(distance * distanceOnTrack * timeOnTrack);
+			float distanceMetric = distanceOnTrack * distance;
+			float timeMetric = ((timeOnTrack + timeAtTopSpeed) / timeRacing);
+			float scale = 1;
+
+			return (int)(Mathf.Max(1, distanceMetric * timeMetric * scale));
 		}
 	}
 
@@ -48,6 +55,12 @@ public class Car : MonoBehaviour {
 		startingPos = transform.position;
 		startingRot = transform.rotation;
 		startingSca = transform.localScale;
+
+		// Scale stat conversions by a common scale and the applications time scaling.
+		topSpeedScale *= statScale * GenomeGenerator.Instance.timeScaling;
+		accelerationScale *= statScale * GenomeGenerator.Instance.timeScaling;
+		handlingBrakeScale *= statScale * GenomeGenerator.Instance.timeScaling;
+		handlingTurnScale *= statScale * GenomeGenerator.Instance.timeScaling;
 	}
 
 	void Update () {
@@ -77,6 +90,7 @@ public class Car : MonoBehaviour {
 			velocity += Vector3.up * (acceleration * accelerationScale * Time.deltaTime);
 			if (velocity.sqrMagnitude > (topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) {
 				velocity = Vector3.up * topSpeed * topSpeedScale;
+				timeAtTopSpeed += Time.deltaTime;
 			}
 		}
 		// Decelerate
@@ -112,5 +126,6 @@ public class Car : MonoBehaviour {
 		timeRacing = 0.0f;
 		lapCount = 0;
 		lastTrackPos = transform.position;
+		driver.currentMove = 0;
 	}
 }

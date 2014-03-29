@@ -30,6 +30,8 @@ public class Car : MonoBehaviour {
 	// Progession
 	public float distance = 0.0f;
 	public float distanceOnTrack = 0.0f;
+	private Vector3 centroid;
+	public float distanceFromCentroid = 0.0f;
 	public float timeOnTrack = 0.0f;
 	public float timeRacing = 0.0f;
 	public float timeAtTopSpeed = 0;
@@ -43,8 +45,8 @@ public class Car : MonoBehaviour {
 			//float onTrackProportion = (distanceOnTrack / distance);
 			//return Mathf.Max(1, (int)(distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack)) * 10));
 			//(distance * distanceOnTrack * timeOnTrack);
-			float distanceMetric = distanceOnTrack * distance;
-			float timeMetric = ((timeOnTrack + timeAtTopSpeed) / timeRacing);
+			float distanceMetric = distanceOnTrack * distance * distance;// * distanceFromCentroid;
+			float timeMetric = ((timeOnTrack) / timeRacing);
 			float scale = 1;
 
 			return (int)(Mathf.Max(1, distanceMetric * timeMetric * scale));
@@ -55,6 +57,7 @@ public class Car : MonoBehaviour {
 		startingPos = transform.position;
 		startingRot = transform.rotation;
 		startingSca = transform.localScale;
+		centroid = transform.position;
 
 		// Scale stat conversions by a common scale and the applications time scaling.
 		topSpeedScale *= statScale * GenomeGenerator.Instance.timeScaling;
@@ -63,7 +66,7 @@ public class Car : MonoBehaviour {
 		handlingTurnScale *= statScale * GenomeGenerator.Instance.timeScaling;
 	}
 
-	void Update () {
+	void FixedUpdate () {
 		// Check if on track.
 		bool onTrack = false;
 		if (IsOnTrack()) {
@@ -74,12 +77,14 @@ public class Car : MonoBehaviour {
 		}
 
 		// Apply velocity
-		transform.Translate(velocity * Time.deltaTime);
-		distance += velocity.magnitude * Time.deltaTime;
-		timeRacing += Time.deltaTime;
+		transform.Translate(velocity * Time.fixedDeltaTime);
+		distance += velocity.magnitude * Time.fixedDeltaTime;
+		//distanceFromCentroid = (transform.position - centroid).sqrMagnitude;
+		//centroid = ((centroid * driver.currentMove) + transform.position) / (driver.currentMove + 1);
+		timeRacing += Time.fixedDeltaTime;
 		if (onTrack) {
-			distanceOnTrack += velocity.magnitude * Time.deltaTime;
-			timeOnTrack += Time.deltaTime;
+			distanceOnTrack += velocity.magnitude * Time.fixedDeltaTime;
+			timeOnTrack += Time.fixedDeltaTime;
 			lastTrackPos = transform.position;
 		}
 	}
@@ -87,15 +92,15 @@ public class Car : MonoBehaviour {
 	public void Accelerate(bool decelerate) {
 		// Accelerate
 		if (!decelerate) {
-			velocity += Vector3.up * (acceleration * accelerationScale * Time.deltaTime);
+			velocity += Vector3.up * (acceleration * accelerationScale * Time.fixedDeltaTime);
 			if (velocity.sqrMagnitude > (topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) {
 				velocity = Vector3.up * topSpeed * topSpeedScale;
-				timeAtTopSpeed += Time.deltaTime;
+				timeAtTopSpeed += Time.fixedDeltaTime;
 			}
 		}
 		// Decelerate
 		else {
-			velocity -= Vector3.up * (handling * handlingBrakeScale * Time.deltaTime);
+			velocity -= Vector3.up * (handling * handlingBrakeScale * Time.fixedDeltaTime);
 			if (Vector3.Dot(velocity, Vector3.up) < 0) {
 				velocity = Vector3.zero;
 			}
@@ -103,7 +108,7 @@ public class Car : MonoBehaviour {
 	}
 
 	public void Turn(int direction) {
-		transform.Rotate(0, 0, handling * handlingTurnScale * direction * Time.deltaTime);
+		transform.Rotate(0, 0, handling * handlingTurnScale * direction * Time.fixedDeltaTime);
 	}
 
 	private bool IsOnTrack() {

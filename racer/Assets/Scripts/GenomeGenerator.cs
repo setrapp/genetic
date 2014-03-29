@@ -24,6 +24,8 @@ public class GenomeGenerator : MonoBehaviour
 	public int winningCarIndex;
 	public StatsController statsController;
 	private List<Genome> population;
+	public Material normalCarMaterial;
+	public Material winningCarMaterial;
 
 	// Random
 	public int genomeSeed;
@@ -80,6 +82,7 @@ public class GenomeGenerator : MonoBehaviour
 			cars[i].driver.GenerateAllMoves();
 			population[i].car = cars[i];
 			population[i].moves = population[i].car.driver.moves;
+			population[i].id = (currentGeneration + 1) + ((i + 1) * 0.01f);
 		}
 		currentGeneration = 0;
 		winningCarIndex = 0;
@@ -87,6 +90,7 @@ public class GenomeGenerator : MonoBehaviour
 	}
 
 	void Update() {
+		winningCar.gameObject.renderer.material = normalCarMaterial;
 		winningCarIndex = 0;
 		for (int i = 1; i < cars.Count; i++) {
 			if (cars[i].Fitness > cars[winningCarIndex].Fitness) {
@@ -94,6 +98,7 @@ public class GenomeGenerator : MonoBehaviour
 			}
 		}
 		winningCar = cars[winningCarIndex];
+		winningCar.gameObject.renderer.material = winningCarMaterial;
 	}
 
 	public void TimerDone() {
@@ -211,7 +216,9 @@ public class GenomeGenerator : MonoBehaviour
 		// Save elites.
 		for (int i = 0; i < elites.Count; i++) {
 			newPopulation.Add(CreateChild(elites[i], elites[i], i, false, false, true));
+			Debug.Log ("" + elites[i].id + ": " + elites[i].endingFitness);
 		}
+		Debug.Log ("-------");
 
 		// Generate next generation.
 		ReproductionRange[] reproductionRanges = WeightParents();
@@ -267,8 +274,12 @@ public class GenomeGenerator : MonoBehaviour
 		child.car = cars[memberIndex];
 		child.moves = child.car.driver.moves;
 
+		// Skip crossover and mutation for elites.
 		if (isElite) {
 			child.elite = true;
+			child.moves = parent1.moves;
+			child.car.driver.moves = child.moves;
+			child.id = parent1.id;
 			return child;
 		}
 
@@ -312,7 +323,8 @@ public class GenomeGenerator : MonoBehaviour
 		if ((float)genomeRandom.NextDouble() < moveMutationRate) {
 			MutateDriver(child);
 		}
-		//child.moves = child.car.driver.moves;
+		child.moves = child.car.driver.moves;
+		child.id = (currentGeneration + 1) + ((memberIndex + 1) * 0.01f);
 		return child;
 	}
 
@@ -569,6 +581,7 @@ public class Genome {
 	public List<GeneticMove> moves;
 	public int endingFitness;
 	public bool elite;
+	public float id;
 }
 
 public class ReproductionRange {

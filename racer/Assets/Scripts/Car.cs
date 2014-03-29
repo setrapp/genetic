@@ -30,11 +30,10 @@ public class Car : MonoBehaviour {
 	// Progession
 	public float distance = 0.0f;
 	public float distanceOnTrack = 0.0f;
-	private Vector3 centroid;
-	public float distanceFromCentroid = 0.0f;
-	public float timeOnTrack = 0.0f;
-	public float timeRacing = 0.0f;
-	public float timeAtTopSpeed = 0;
+	public float durationOnTrack = 0.0f;
+	public float lastDurationOnTrack = 0.0f;
+	public float durationRacing = 0.0f;
+	public float durationAtTopSpeed = 0;
 	public int lapCount = 0;
 	public Vector3 lastTrackPos;
 
@@ -42,12 +41,9 @@ public class Car : MonoBehaviour {
 	public TextMesh numberText;
 	public int Fitness {
 		get {
-			//float onTrackProportion = (distanceOnTrack / distance);
-			//return Mathf.Max(1, (int)(distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack)) * 10));
-			//(distance * distanceOnTrack * timeOnTrack);
-			float distanceMetric = distanceOnTrack * distance * distance;// * distanceFromCentroid;
-			float timeMetric = ((timeOnTrack) / timeRacing);
-			float scale = 1;
+			float distanceMetric = distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack));
+			float timeMetric = ((durationOnTrack + lastDurationOnTrack) / durationRacing);
+			float scale = 100;
 
 			return (int)(Mathf.Max(1, distanceMetric * timeMetric * scale));
 		}
@@ -57,7 +53,6 @@ public class Car : MonoBehaviour {
 		startingPos = transform.position;
 		startingRot = transform.rotation;
 		startingSca = transform.localScale;
-		centroid = transform.position;
 
 		// Scale stat conversions by a common scale and the applications time scaling.
 		topSpeedScale *= statScale * GenomeGenerator.Instance.timeScaling;
@@ -79,13 +74,14 @@ public class Car : MonoBehaviour {
 		// Apply velocity
 		transform.Translate(velocity * Time.fixedDeltaTime);
 		distance += velocity.magnitude * Time.fixedDeltaTime;
-		//distanceFromCentroid = (transform.position - centroid).sqrMagnitude;
-		//centroid = ((centroid * driver.currentMove) + transform.position) / (driver.currentMove + 1);
-		timeRacing += Time.fixedDeltaTime;
+		durationRacing += Time.fixedDeltaTime;
 		if (onTrack) {
 			distanceOnTrack += velocity.magnitude * Time.fixedDeltaTime;
-			timeOnTrack += Time.fixedDeltaTime;
+			durationOnTrack += Time.fixedDeltaTime;
+			lastDurationOnTrack += Time.fixedDeltaTime;
 			lastTrackPos = transform.position;
+		} else {
+			lastDurationOnTrack = 0.0f;
 		}
 	}
 
@@ -95,7 +91,7 @@ public class Car : MonoBehaviour {
 			velocity += Vector3.up * (acceleration * accelerationScale * Time.fixedDeltaTime);
 			if (velocity.sqrMagnitude > (topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) {
 				velocity = Vector3.up * topSpeed * topSpeedScale;
-				timeAtTopSpeed += Time.fixedDeltaTime;
+				durationAtTopSpeed += Time.fixedDeltaTime;
 			}
 		}
 		// Decelerate
@@ -127,10 +123,10 @@ public class Car : MonoBehaviour {
 		transform.localScale = startingSca;
 		distance = 0;
 		distanceOnTrack = 0.0f;
-		timeOnTrack = 0.0f;
-		timeRacing = 0.0f;
+		lastDurationOnTrack = 0.0f;
+		durationRacing = 0.0f;
 		lapCount = 0;
 		lastTrackPos = transform.position;
-		driver.currentMove = 0;
+		driver.ResetDriver();
 	}
 }

@@ -16,9 +16,15 @@ public class GeneticDriver : MonoBehaviour
 	public float turnRate = 0.5f;
 	public List<GeneticMove> moves;
 	public int currentMove = 0;
+	private bool firstMove = false;
 
 	void FixedUpdate() {
 		milliSinceStep += (int)(Time.deltaTime * 1000);
+		if (firstMove) {
+			milliSinceStep = 0;
+			firstMove = false;
+		}
+
 		if (milliSinceStep >= timeStepMilli) {
 			milliSinceStep = 0;
 			currentMove++;
@@ -38,7 +44,7 @@ public class GeneticDriver : MonoBehaviour
 		numSteps = (int)(numStepsPerSec * fullTimeMilli / 1000.0f);
 		timeStepMilli = (int)(fullTimeMilli / (float)numSteps);
 
-		currentMove = 0;
+		ResetDriver();
 	}
 
 	public void GenerateAllMoves() {
@@ -59,29 +65,41 @@ public class GeneticDriver : MonoBehaviour
 		}
 	}
 
-	public void GenerateMove(int moveIndex) {
-		moves[moveIndex].accelerate = false;
-		moves[moveIndex].decelerate = false;
-		moves[moveIndex].turnLeft = false;
-		moves[moveIndex].turnRight = false;
+	public GeneticMove GenerateMove(int moveIndex = -1) {
+		GeneticMove newMove = new GeneticMove();
+		newMove.accelerate = false;
+		newMove.decelerate = false;
+		newMove.turnLeft = false;
+		newMove.turnRight = false;
 
 		// Determine if car should change speed.
 		if ((float)random.NextDouble() < accelerateRate) {
 			if ((float)random.NextDouble() < decelerateRate) {
-				moves[moveIndex].decelerate = true;
+				newMove.decelerate = true;
 			} else { 
-				moves[moveIndex].accelerate = true;
+				newMove.accelerate = true;
 			}
 		}
 
 		// Determine if car should turn.
 		if ((float)random.NextDouble() < turnRate) {
 			if ((float)random.NextDouble() < 0.5) {
-				moves[moveIndex].turnLeft = true;
+				newMove.turnLeft = true;
 			} else { 
-				moves[moveIndex].turnRight = true;
+				newMove.turnRight = true;
 			}
 		}
+
+		// If the index is out of bounds, simply return the move.
+		if (moveIndex < 0 || moveIndex > moves.Count - 1) {
+			return newMove;
+		}
+
+		// Store the new move at the specified index.
+		moves.RemoveAt(moveIndex);
+		moves.Insert(moveIndex, newMove);
+
+		return newMove;
 	}
 
 	private void ReadCurrentMove() {
@@ -117,6 +135,11 @@ public class GeneticDriver : MonoBehaviour
 		}
 		similarity /= Mathf.Max(targetMoves.Count, moves.Count);
 		return similarity;
+	}
+
+	public void ResetDriver() {
+		currentMove = 0;
+		firstMove = true;
 	}
 }
 

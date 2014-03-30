@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\StatsController.cs" />
      <Compile Include="Assets\Scripts\Timer.cs" />
      <Compile Include="Assets\Scripts\TrackInfoController.cs" />
+     <Compile Include="Assets\Scripts\WriterReader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

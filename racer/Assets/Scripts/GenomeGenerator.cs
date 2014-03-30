@@ -17,6 +17,9 @@ public class GenomeGenerator : MonoBehaviour
 	[HideInInspector]
 	public int targetFrameRate = 60;
 	public float timeScaling = 1;
+	public WriterReader writerReader= null;
+	public bool readFromFile = false;
+	public bool writeToFile = false;
 	public bool done = false;
 	[HideInInspector]
 	public List<Car> cars;
@@ -65,13 +68,13 @@ public class GenomeGenerator : MonoBehaviour
 		done = false;
 		genomeRandom = new System.Random(genomeSeed);
 		statRandom = new System.Random(statSeed);
+		population = new List<Genome>();
 		cars.Clear();
 		GameObject[] carObjects = GameObject.FindGameObjectsWithTag("Car");
 		for (int i = 0; i < carObjects.Length; i++) {
 			cars.Add(carObjects[i].GetComponent<Car>());
 		}
 		membersInGeneration = cars.Count;
-		population = new List<Genome>();
 		for (int i = 0; i < membersInGeneration; i++) {
 			int newTopSpeed, newAcceleration, newHandling;
 			RandomizeStats(cars[i]);
@@ -86,6 +89,11 @@ public class GenomeGenerator : MonoBehaviour
 			cars[i].numberText.text = "" + population[i].id;
 		}
 		currentGeneration = 0;
+
+		if (readFromFile) {
+			writerReader.ReadPopulation(population);
+		} 
+
 		winningCarIndex = 0;
 		winningCar = cars[winningCarIndex];
 	}
@@ -108,6 +116,12 @@ public class GenomeGenerator : MonoBehaviour
 			population[i].endingFitness = cars[i].Fitness;
 		}
 
+		// Record generation.
+		if (writeToFile) {
+			writerReader.WritePopulation(population);
+		}
+
+		// Create new generation.
 		CreateNextGeneration();
 		for (int i = 0; i < membersInGeneration; i++) {
 			cars[i].ResetCar();
@@ -177,11 +191,6 @@ public class GenomeGenerator : MonoBehaviour
 				}
 			}
 		}
-
-		/*for (int i = 0; i < elites.Count; i++) {
-			Debug.Log(elites[i].id);
-		}
-		Debug.Log ("-------");*/
 
 		// Attempt to introduce diversity by altering cars that are too similar.
 		int statCloneCount = 0, moveCloneCount = 0;
@@ -280,6 +289,9 @@ public class GenomeGenerator : MonoBehaviour
 		// Skip crossover and mutation for elites.
 		if (isElite) {
 			child.elite = true;
+			child.car.topSpeed = parent1.car.topSpeed;
+			child.car.acceleration = parent1.car.acceleration;
+			child.car.handling = parent1.car.handling;
 			int numSteps = parent1.moves.Count;
 			child.moves = new List<GeneticMove>();
 			for (int i = 0; i < numSteps; i++) {

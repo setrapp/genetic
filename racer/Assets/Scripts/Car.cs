@@ -34,6 +34,7 @@ public class Car : MonoBehaviour {
 	public float lastDurationOnTrack = 0.0f;
 	public float durationRacing = 0.0f;
 	public float durationAtTopSpeed = 0;
+	public float durationAboveHalfSpeed = 0;
 	public int lapCount = 0;
 	public Vector3 lastTrackPos;
 
@@ -42,8 +43,8 @@ public class Car : MonoBehaviour {
 	public int Fitness {
 		get {
 			float distanceMetric = distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack));
-			float timeMetric = ((durationOnTrack + lastDurationOnTrack) / durationRacing);
-			float scale = 100;
+			float timeMetric = (durationOnTrack + durationAboveHalfSpeed) / durationRacing;
+			float scale = 10;
 
 			return (int)(Mathf.Max(1, distanceMetric * timeMetric * scale));
 		}
@@ -92,6 +93,9 @@ public class Car : MonoBehaviour {
 			if (velocity.sqrMagnitude > (topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) {
 				velocity = Vector3.up * topSpeed * topSpeedScale;
 				durationAtTopSpeed += Time.fixedDeltaTime;
+			}
+			if (velocity.sqrMagnitude > ((topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) / 4) {
+				durationAboveHalfSpeed += Time.fixedDeltaTime;
 			}
 		}
 		// Decelerate

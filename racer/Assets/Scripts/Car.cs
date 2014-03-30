@@ -14,6 +14,9 @@ public class Car : MonoBehaviour {
 	public int statPoolSize;
 	public int statMin;
 	public int statMax;
+	public GameObject topSpeedBar;
+	public GameObject accelerationBar;
+	public GameObject handlingBar;
 
 	// Stat Conversions
 	public float statScale = 1;
@@ -60,6 +63,8 @@ public class Car : MonoBehaviour {
 		accelerationScale *= statScale * GenomeGenerator.Instance.timeScaling;
 		handlingBrakeScale *= statScale * GenomeGenerator.Instance.timeScaling;
 		handlingTurnScale *= statScale * GenomeGenerator.Instance.timeScaling;
+
+		ResetCar();
 	}
 
 	void FixedUpdate () {
@@ -125,6 +130,10 @@ public class Car : MonoBehaviour {
 		transform.position = startingPos;
 		transform.rotation = startingRot;
 		transform.localScale = startingSca;
+		Vector3 statScale = topSpeedBar.transform.localScale;
+		topSpeedBar.transform.localScale = new Vector3(statScale.x, (float)topSpeed, statScale.z);
+		accelerationBar.transform.localScale = new Vector3(statScale.x, (float)acceleration, statScale.z);
+		handlingBar.transform.localScale = new Vector3(statScale.x, (float)handling, statScale.z);
 		distance = 0;
 		distanceOnTrack = 0.0f;
 		lastDurationOnTrack = 0.0f;
@@ -132,5 +141,6 @@ public class Car : MonoBehaviour {
 		lapCount = 0;
 		lastTrackPos = transform.position;
 		driver.ResetDriver();
+
 	}
 }

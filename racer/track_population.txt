@@ -1,0 +1,1001 @@
+generation: 30
+id: 30.13
+fitness: 3013
+topSpeed: 16
+acceleration: 43
+handling: 41
+move0: 0 0 0 1
+move1: 1 0 1 0
+move2: 1 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 1 0 0 1
+move10: 0 0 0 1
+move11: 0 0 0 1
+move12: 1 0 0 0
+move13: 0 0 0 1
+move14: 0 1 0 1
+id: 29.35
+fitness: 1928
+topSpeed: 39
+acceleration: 45
+handling: 16
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 1 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 0 0 0
+move6: 0 0 0 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 1 0 1 0
+move10: 0 1 0 1
+move11: 0 0 1 0
+move12: 0 0 0 0
+move13: 0 1 1 0
+move14: 0 1 0 1
+id: 28.07
+fitness: 3147
+topSpeed: 16
+acceleration: 43
+handling: 41
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 0 1
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 30.07
+fitness: 2792
+topSpeed: 32
+acceleration: 49
+handling: 19
+move0: 0 0 0 1
+move1: 1 0 1 0
+move2: 1 0 1 0
+move3: 1 0 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 1 0 0 1
+move10: 0 0 1 0
+move11: 0 1 1 0
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 30.24
+fitness: 3599
+topSpeed: 18
+acceleration: 38
+handling: 44
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 1 0 0 1
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 0 1
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.06
+fitness: 3406
+topSpeed: 41
+acceleration: 50
+handling: 9
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 0 0 1 0
+move3: 1 0 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 1 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.07
+fitness: 2610
+topSpeed: 40
+acceleration: 48
+handling: 12
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 0 0 1 0
+move3: 1 0 0 1
+move4: 0 0 1 0
+move5: 0 0 0 0
+move6: 0 0 0 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.08
+fitness: 1532
+topSpeed: 48
+acceleration: 47
+handling: 5
+move0: 0 0 0 1
+move1: 1 0 1 0
+move2: 1 0 1 0
+move3: 0 1 1 0
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 0 1
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 0 0 1 0
+move11: 0 1 1 0
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.09
+fitness: 1205
+topSpeed: 48
+acceleration: 47
+handling: 5
+move0: 0 0 0 1
+move1: 1 0 1 0
+move2: 1 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 0 1
+move8: 0 0 1 0
+move9: 1 0 0 1
+move10: 0 0 1 0
+move11: 0 1 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.1
+fitness: 435
+topSpeed: 37
+acceleration: 35
+handling: 28
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 1 0 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 0 1
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 1 0 0 1
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 1 0 0 0
+move13: 0 0 0 0
+move14: 0 1 0 1
+id: 31.11
+fitness: 2392
+topSpeed: 24
+acceleration: 35
+handling: 41
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 0 1
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.12
+fitness: 1027
+topSpeed: 34
+acceleration: 51
+handling: 15
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 1 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 0 1
+move6: 0 1 1 0
+move7: 0 0 0 1
+move8: 0 1 1 0
+move9: 0 0 0 1
+move10: 0 0 1 0
+move11: 0 1 1 0
+move12: 0 1 0 1
+move13: 1 0 1 0
+move14: 0 1 0 1
+id: 31.13
+fitness: 230
+topSpeed: 34
+acceleration: 47
+handling: 19
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 0 0 1 0
+move3: 1 0 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 1 0 1 0
+move14: 0 1 0 1
+id: 31.14
+fitness: 1882
+topSpeed: 48
+acceleration: 40
+handling: 12
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 1 0 0 1
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 0 1
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.15
+fitness: 2188
+topSpeed: 45
+acceleration: 37
+handling: 18
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.16
+fitness: 1675
+topSpeed: 40
+acceleration: 42
+handling: 18
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 1 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 0 1
+move6: 0 0 0 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 1 0 1 0
+move10: 0 1 0 1
+move11: 0 0 1 0
+move12: 0 0 0 0
+move13: 0 1 1 0
+move14: 0 1 0 1
+id: 31.17
+fitness: 1457
+topSpeed: 41
+acceleration: 41
+handling: 18
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 0 1
+move6: 0 0 0 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 1 0 1 0
+move10: 0 1 0 1
+move11: 0 0 1 0
+move12: 0 0 0 0
+move13: 0 1 1 0
+move14: 0 1 0 1
+id: 31.18
+fitness: 2657
+topSpeed: 37
+acceleration: 47
+handling: 16
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 0 0 1 0
+move3: 0 0 0 1
+move4: 0 1 1 0
+move5: 0 0 1 0
+move6: 0 1 1 0
+move7: 0 1 1 0
+move8: 0 0 1 0
+move9: 0 1 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.19
+fitness: 2537
+topSpeed: 34
+acceleration: 47
+handling: 19
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 0 1 0 1
+move3: 0 0 1 0
+move4: 0 1 1 0
+move5: 0 0 1 0
+move6: 0 1 0 1
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.2
+fitness: 1822
+topSpeed: 45
+acceleration: 37
+handling: 18
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 0 0 1
+move4: 0 1 1 0
+move5: 0 0 1 0
+move6: 0 1 1 0
+move7: 0 1 1 0
+move8: 0 1 0 1
+move9: 0 1 1 0
+move10: 0 1 1 0
+move11: 0 1 1 0
+move12: 0 0 0 0
+move13: 0 1 1 0
+move14: 0 1 0 1
+id: 31.21
+fitness: 1421
+topSpeed: 48
+acceleration: 47
+handling: 5
+move0: 0 0 0 1
+move1: 1 0 1 0
+move2: 1 0 0 1
+move3: 0 1 1 0
+move4: 0 0 0 1
+move5: 0 1 0 1
+move6: 0 0 0 1
+move7: 0 0 0 1
+move8: 0 0 1 0
+move9: 0 0 0 1
+move10: 1 0 0 0
+move11: 0 0 0 1
+move12: 0 0 0 1
+move13: 0 0 0 1
+move14: 0 1 0 1
+id: 31.22
+fitness: 3007
+topSpeed: 32
+acceleration: 41
+handling: 27
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 0 1
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.23
+fitness: 2020
+topSpeed: 32
+acceleration: 41
+handling: 27
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 1 0 0 0
+move3: 0 0 0 0
+move4: 1 0 0 1
+move5: 0 1 0 0
+move6: 0 1 0 0
+move7: 0 0 0 0
+move8: 0 0 0 0
+move9: 1 0 0 0
+move10: 0 1 0 0
+move11: 0 0 0 0
+move12: 1 0 0 1
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.24
+fitness: 1598
+topSpeed: 36
+acceleration: 45
+handling: 19
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 1 0 0 0
+move9: 0 0 1 0
+move10: 0 0 0 0
+move11: 1 0 1 0
+move12: 0 0 1 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.25
+fitness: 2674
+topSpeed: 40
+acceleration: 42
+handling: 18
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 1 0 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 1 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.26
+fitness: 3412
+topSpeed: 41
+acceleration: 50
+handling: 9
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 0 1 0
+move6: 1 0 1 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 1 0 1 0
+move10: 0 0 1 0
+move11: 0 1 1 0
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.27
+fitness: 2156
+topSpeed: 40
+acceleration: 48
+handling: 12
+move0: 0 0 0 1
+move1: 1 0 1 0
+move2: 1 0 1 0
+move3: 1 0 0 1
+move4: 1 0 0 0
+move5: 0 0 1 0
+move6: 0 1 0 1
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 1 0 0 1
+move10: 0 0 1 0
+move11: 0 1 1 0
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.28
+fitness: 2236
+topSpeed: 38
+acceleration: 43
+handling: 19
+move0: 0 1 1 0
+move1: 0 1 1 0
+move2: 0 0 1 0
+move3: 0 0 0 0
+move4: 0 0 1 0
+move5: 0 0 0 0
+move6: 0 1 1 0
+move7: 1 0 1 0
+move8: 0 0 0 1
+move9: 0 1 1 0
+move10: 0 0 0 1
+move11: 0 1 0 1
+move12: 1 0 0 1
+move13: 0 1 1 0
+move14: 0 1 0 1
+id: 31.29
+fitness: 1475
+topSpeed: 39
+acceleration: 44
+handling: 17
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 1 0 0 0
+move9: 0 0 1 0
+move10: 0 0 0 0
+move11: 1 0 1 0
+move12: 0 0 1 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.3
+fitness: 2030
+topSpeed: 34
+acceleration: 50
+handling: 16
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 0 0 1 0
+move3: 0 0 0 1
+move4: 0 1 1 0
+move5: 0 0 1 0
+move6: 0 1 1 0
+move7: 0 0 1 0
+move8: 0 0 0 0
+move9: 0 1 1 0
+move10: 0 0 1 0
+move11: 0 1 1 0
+move12: 0 0 0 0
+move13: 0 1 0 1
+move14: 0 1 0 1
+id: 31.31
+fitness: 1923
+topSpeed: 33
+acceleration: 50
+handling: 17
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 1 0 1 0
+move3: 0 0 0 1
+move4: 0 1 1 0
+move5: 0 0 1 0
+move6: 0 1 1 0
+move7: 0 1 1 0
+move8: 0 1 1 0
+move9: 0 0 0 1
+move10: 0 0 1 0
+move11: 0 0 1 0
+move12: 0 0 0 0
+move13: 1 0 1 0
+move14: 0 1 0 1
+id: 31.32
+fitness: 2020
+topSpeed: 41
+acceleration: 50
+handling: 9
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 1 0 0 1
+move3: 1 0 0 1
+move4: 0 1 1 0
+move5: 0 0 1 0
+move6: 0 0 0 1
+move7: 1 0 1 0
+move8: 0 0 1 0
+move9: 1 0 0 1
+move10: 1 0 0 1
+move11: 0 1 0 1
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.33
+fitness: 3160
+topSpeed: 38
+acceleration: 43
+handling: 19
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 0 0 1 0
+move3: 0 0 1 0
+move4: 1 0 0 0
+move5: 0 0 1 0
+move6: 0 1 0 1
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 1 0 1 0
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.34
+fitness: 2784
+topSpeed: 38
+acceleration: 43
+handling: 19
+move0: 0 0 1 0
+move1: 0 0 0 0
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 1 0 1 0
+move10: 1 0 1 0
+move11: 0 1 1 0
+move12: 0 1 0 1
+move13: 0 1 0 1
+move14: 0 1 0 1
+id: 31.35
+fitness: 1416
+topSpeed: 38
+acceleration: 49
+handling: 13
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 0 0 1 0
+move3: 1 0 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 0 1
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.36
+fitness: 1981
+topSpeed: 41
+acceleration: 50
+handling: 9
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 1 0 0 1
+move3: 0 0 1 0
+move4: 1 0 0 0
+move5: 0 1 1 0
+move6: 0 1 0 1
+move7: 0 0 1 0
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 0 1 0
+move13: 1 0 1 0
+move14: 0 1 0 1
+id: 31.37
+fitness: 656
+topSpeed: 48
+acceleration: 47
+handling: 5
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 0 1 0 1
+move3: 0 1 1 0
+move4: 0 0 0 1
+move5: 0 1 1 0
+move6: 0 1 0 1
+move7: 0 0 0 1
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 0 1 0 1
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.38
+fitness: 3522
+topSpeed: 41
+acceleration: 29
+handling: 30
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 0 0 0
+move6: 0 0 0 0
+move7: 0 0 1 0
+move8: 0 0 0 1
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 1 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.39
+fitness: 304
+topSpeed: 29
+acceleration: 30
+handling: 41
+move0: 0 0 0 1
+move1: 1 0 1 0
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 1 0 1 0
+move5: 1 0 0 0
+move6: 1 0 0 0
+move7: 1 0 1 0
+move8: 1 0 1 0
+move9: 0 0 0 1
+move10: 1 0 1 0
+move11: 0 0 1 0
+move12: 0 0 0 0
+move13: 1 0 1 0
+move14: 0 1 0 1
+id: 31.4
+fitness: 1147
+topSpeed: 35
+acceleration: 43
+handling: 22
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 1 0
+move4: 0 0 0 0
+move5: 0 0 0 1
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 1 0 0 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 1 0 0 0
+move13: 1 0 1 0
+move14: 0 1 0 1
+id: 31.41
+fitness: 875
+topSpeed: 34
+acceleration: 50
+handling: 16
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 0 1
+move3: 0 1 1 0
+move4: 0 0 0 0
+move5: 0 1 1 0
+move6: 0 0 0 1
+move7: 0 1 1 0
+move8: 0 1 0 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 1 1 0
+move12: 0 0 0 0
+move13: 0 1 1 0
+move14: 0 1 0 1
+id: 31.42
+fitness: 458
+topSpeed: 21
+acceleration: 35
+handling: 44
+move0: 0 0 0 1
+move1: 1 0 1 0
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 1 0 1 0
+move8: 0 0 1 0
+move9: 1 0 0 1
+move10: 0 0 0 1
+move11: 0 0 1 0
+move12: 1 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.43
+fitness: 1
+topSpeed: 21
+acceleration: 57
+handling: 22
+move0: 0 0 1 0
+move1: 0 0 1 0
+move2: 0 0 1 0
+move3: 0 1 1 0
+move4: 0 0 1 0
+move5: 0 0 1 0
+move6: 0 1 1 0
+move7: 0 1 1 0
+move8: 0 1 1 0
+move9: 0 0 0 0
+move10: 0 0 1 0
+move11: 0 1 1 0
+move12: 0 1 0 0
+move13: 0 1 1 0
+move14: 0 1 0 1
+id: 31.44
+fitness: 1850
+topSpeed: 45
+acceleration: 37
+handling: 18
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 0 0 1
+move4: 0 1 1 0
+move5: 0 0 1 0
+move6: 0 1 1 0
+move7: 0 1 1 0
+move8: 0 1 0 1
+move9: 0 1 1 0
+move10: 0 1 1 0
+move11: 0 1 1 0
+move12: 0 0 0 0
+move13: 0 1 1 0
+move14: 0 1 0 1
+id: 31.45
+fitness: 14
+topSpeed: 18
+acceleration: 38
+handling: 44
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 0 0 1 0
+move3: 0 0 1 0
+move4: 0 1 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 1 0 1 0
+move8: 0 0 1 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.46
+fitness: 3705
+topSpeed: 27
+acceleration: 32
+handling: 41
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 1 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 0 0 1 0
+move8: 0 0 0 1
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 1 0 0
+move12: 0 0 1 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.47
+fitness: 1241
+topSpeed: 27
+acceleration: 32
+handling: 41
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 1 0 0 1
+move4: 0 0 1 0
+move5: 0 1 1 0
+move6: 0 0 0 1
+move7: 0 0 1 0
+move8: 0 0 0 1
+move9: 0 0 0 1
+move10: 1 0 0 0
+move11: 0 0 0 1
+move12: 0 1 0 0
+move13: 0 0 0 1
+move14: 0 1 0 1
+id: 31.48
+fitness: 619
+topSpeed: 38
+acceleration: 22
+handling: 40
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 0 0 1 0
+move3: 0 0 1 0
+move4: 1 0 0 1
+move5: 0 1 1 0
+move6: 0 0 1 0
+move7: 1 0 1 0
+move8: 0 0 0 0
+move9: 1 0 1 0
+move10: 0 0 0 0
+move11: 0 0 1 0
+move12: 0 0 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.49
+fitness: 2029
+topSpeed: 36
+acceleration: 45
+handling: 19
+move0: 0 0 1 0
+move1: 1 0 0 1
+move2: 0 0 1 0
+move3: 0 0 1 0
+move4: 1 0 0 1
+move5: 0 1 1 0
+move6: 0 1 0 1
+move7: 0 0 1 0
+move8: 1 0 0 0
+move9: 0 0 1 0
+move10: 1 0 0 0
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 0 0 1 0
+move14: 0 1 0 1
+id: 31.5
+fitness: 122
+topSpeed: 25
+acceleration: 34
+handling: 41
+move0: 0 0 1 0
+move1: 1 0 1 0
+move2: 0 0 0 1
+move3: 0 1 1 0
+move4: 0 0 0 0
+move5: 0 1 1 0
+move6: 0 0 0 1
+move7: 0 0 1 0
+move8: 0 1 1 0
+move9: 0 0 1 0
+move10: 0 0 0 1
+move11: 0 0 1 0
+move12: 0 1 0 0
+move13: 0 1 1 0
+move14: 0 1 0 1

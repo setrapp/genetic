@@ -46,10 +46,15 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Button.cs" />
+     <Compile Include="Assets\Scripts\ButtonMatSwap.cs" />
      <Compile Include="Assets\Scripts\Car.cs" />
+     <Compile Include="Assets\Scripts\Checkbox.cs" />
      <Compile Include="Assets\Scripts\GeneticDriver.cs" />
      <Compile Include="Assets\Scripts\GenomeGenerator.cs" />
      <Compile Include="Assets\Scripts\ProgressionController.cs" />
+     <Compile Include="Assets\Scripts\StartButton.cs" />
+     <Compile Include="Assets\Scripts\StartUp.cs" />
      <Compile Include="Assets\Scripts\StatsController.cs" />
      <Compile Include="Assets\Scripts\Timer.cs" />
      <Compile Include="Assets\Scripts\TrackInfoController.cs" />

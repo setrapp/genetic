@@ -34,7 +34,7 @@ public class Timer : MonoBehaviour
 		}
 	}
 
-	private void ResetTimer() {
+	public void ResetTimer() {
 		timeMillisec = durationSec * 1000.0f;
 		done = false;
 		TimeToString();

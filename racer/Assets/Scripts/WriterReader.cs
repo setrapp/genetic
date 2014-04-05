@@ -5,18 +5,19 @@ using System.IO;
 
 public class WriterReader : MonoBehaviour
 {
-	public string geneticFileName;
+	public string readFileName;
+	public string writeFileName;
 
 	public bool WritePopulation(List<Genome> population) {
-		if (geneticFileName == null || geneticFileName.Length < 1) {
+		if (writeFileName == null || writeFileName.Length < 1) {
 			return false;
 		}
 
-		if (File.Exists(geneticFileName)) {
-			File.Delete(geneticFileName);
+		if (File.Exists(writeFileName)) {
+			File.Delete(writeFileName);
 		}
 
-		StreamWriter writer = File.CreateText(geneticFileName);
+		StreamWriter writer = File.CreateText(writeFileName);
 		writer.WriteLine("generation: " + GenomeGenerator.Instance.currentGeneration);
 		for (int i = 0; i < population.Count; i++) {
 			writer.WriteLine("id: " + population[i].id);
@@ -38,15 +39,15 @@ public class WriterReader : MonoBehaviour
 	}
 
 	public bool ReadPopulation(List<Genome> population) {
-		if (geneticFileName == null || geneticFileName.Length < 1) {
+		if (readFileName == null || readFileName.Length < 1) {
 			return false;
 		}
 		
-		if (!File.Exists(geneticFileName)) {
+		if (!File.Exists(readFileName)) {
 			return false;
 		}
 		
-		StreamReader reader = new StreamReader(geneticFileName);
+		StreamReader reader = new StreamReader(readFileName);
 		int populationIndex = -1;
 		char[] seperator = new char[]{' '};
 		while (!reader.EndOfStream) {

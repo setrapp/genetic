@@ -103,7 +103,7 @@ public class GeneticDriver : MonoBehaviour
 	}
 
 	private void ReadCurrentMove() {
-		if (currentMove < 0 || currentMove >= moves.Count) {
+		if (currentMove < 0 || moves == null || currentMove >= moves.Count) {
 			return;
 		}
 

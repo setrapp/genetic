@@ -63,6 +63,12 @@ public class GenomeGenerator : MonoBehaviour
 	public float dangerousSimilarity = 0.7f;
 
 	void Start() {
+		if (GameObject.FindGameObjectWithTag("Universals") == null) {
+			Application.LoadLevel("start");
+		}
+	}
+
+	public void Init() {
 		targetFrameRate = (int)(60 * timeScaling);
 		Application.targetFrameRate = targetFrameRate;
 		done = false;
@@ -99,15 +105,17 @@ public class GenomeGenerator : MonoBehaviour
 	}
 
 	void Update() {
-		winningCar.gameObject.renderer.material = normalCarMaterial;
-		winningCarIndex = 0;
-		for (int i = 1; i < cars.Count; i++) {
-			if (cars[i].Fitness > cars[winningCarIndex].Fitness) {
-				winningCarIndex = i;
+		if (winningCar != null) {
+			winningCar.gameObject.renderer.material = normalCarMaterial;
+			winningCarIndex = 0;
+			for (int i = 1; i < cars.Count; i++) {
+				if (cars[i].Fitness > cars[winningCarIndex].Fitness) {
+					winningCarIndex = i;
+				}
 			}
+			winningCar = cars[winningCarIndex];
+			winningCar.gameObject.renderer.material = winningCarMaterial;
 		}
-		winningCar = cars[winningCarIndex];
-		winningCar.gameObject.renderer.material = winningCarMaterial;
 	}
 
 	public void TimerDone() {

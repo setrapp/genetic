@@ -47,7 +47,7 @@ public class Car : MonoBehaviour {
 	public int Fitness {
 		get {
 			float distanceMetric = distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack));
-			float timeMetric = ((durationOnTrack * 2) - durationStopped) / durationRacing;
+			float timeMetric = ((durationOnTrack * 2) + durationAboveHalfSpeed) / durationRacing;
 			float scale = 1;
 
 			return (int)(Mathf.Max(1, distanceMetric * timeMetric * scale));
@@ -96,22 +96,24 @@ public class Car : MonoBehaviour {
 		// Accelerate
 		if (!decelerate) {
 			velocity += Vector3.up * (acceleration * accelerationScale * Time.fixedDeltaTime);
-			if (velocity.sqrMagnitude > (topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) {
-				velocity = Vector3.up * topSpeed * topSpeedScale;
-				durationAtTopSpeed += Time.fixedDeltaTime;
-			}
-			if (velocity.sqrMagnitude > ((topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) / 4) {
-				durationAboveHalfSpeed += Time.fixedDeltaTime;
-			} 
 		}
 		// Decelerate
 		else {
 			velocity -= Vector3.up * (handling * handlingBrakeScale * Time.fixedDeltaTime);
-			if (Vector3.Dot(velocity, Vector3.up) < 0) {
-				velocity = Vector3.zero;
-				durationStopped += Time.fixedDeltaTime;
-			}
 		}
+
+		// Clamp and record.
+		if (velocity.sqrMagnitude >= (topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) {
+			velocity = Vector3.up * topSpeed * topSpeedScale;
+			durationAtTopSpeed += Time.fixedDeltaTime;
+		}
+		else if (Vector3.Dot(velocity, Vector3.up) <= 0) {
+			velocity = Vector3.zero;
+			durationStopped += Time.fixedDeltaTime;
+		}
+		else if (velocity.sqrMagnitude > ((topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) / 4) {
+			durationAboveHalfSpeed += Time.fixedDeltaTime;
+		} 
 	}
 
 	public void Turn(int direction) {

@@ -38,6 +38,7 @@ public class Car : MonoBehaviour {
 	public float durationRacing = 0.0f;
 	public float durationAtTopSpeed = 0;
 	public float durationAboveHalfSpeed = 0;
+	public float durationStopped = 0;
 	public int lapCount = 0;
 	public Vector3 lastTrackPos;
 
@@ -46,8 +47,8 @@ public class Car : MonoBehaviour {
 	public int Fitness {
 		get {
 			float distanceMetric = distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack));
-			float timeMetric = (durationOnTrack + durationAboveHalfSpeed) / durationRacing;
-			float scale = 10;
+			float timeMetric = ((durationOnTrack * 2) - durationStopped) / durationRacing;
+			float scale = 1;
 
 			return (int)(Mathf.Max(1, distanceMetric * timeMetric * scale));
 		}
@@ -101,13 +102,14 @@ public class Car : MonoBehaviour {
 			}
 			if (velocity.sqrMagnitude > ((topSpeed * topSpeed) * (topSpeedScale * topSpeedScale)) / 4) {
 				durationAboveHalfSpeed += Time.fixedDeltaTime;
-			}
+			} 
 		}
 		// Decelerate
 		else {
 			velocity -= Vector3.up * (handling * handlingBrakeScale * Time.fixedDeltaTime);
 			if (Vector3.Dot(velocity, Vector3.up) < 0) {
 				velocity = Vector3.zero;
+				durationStopped += Time.fixedDeltaTime;
 			}
 		}
 	}
@@ -124,6 +126,14 @@ public class Car : MonoBehaviour {
 			}
 		}
 		return false;
+	}
+
+	public void MoveToForeground() {
+		transform.position = new Vector3(transform.position.x, transform.position.y, startingPos.z - 1);
+	}
+
+	public void MoveToMidground() {
+		transform.position = new Vector3(transform.position.x, transform.position.y, startingPos.z);
 	}
 
 	public void ResetCar() {

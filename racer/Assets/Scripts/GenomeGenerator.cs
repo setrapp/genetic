@@ -103,24 +103,12 @@ public class GenomeGenerator : MonoBehaviour
 			writerReader.ReadPopulation(population);
 		} 
 
-		winningCarIndex = 0;
-		winningCar = cars[winningCarIndex];
+		winningCar = null;
+		UpdateWinningCar();
 	}
 
 	void Update() {
-		if (winningCar != null) {
-			winningCar.gameObject.renderer.material = normalCarMaterial;
-			winningCar.transform.Translate(0, 0, 1);
-			winningCarIndex = 0;
-			for (int i = 1; i < cars.Count; i++) {
-				if (cars[i].Fitness > cars[winningCarIndex].Fitness) {
-					winningCarIndex = i;
-				}
-			}
-			winningCar = cars[winningCarIndex];
-			winningCar.gameObject.renderer.material = winningCarMaterial;
-			winningCar.transform.Translate(0, 0, -1);
-		}
+		UpdateWinningCar();
 	}
 
 	public void TimerDone() {
@@ -136,6 +124,8 @@ public class GenomeGenerator : MonoBehaviour
 
 		// Create new generation.
 		CreateNextGeneration();
+		winningCar = null;
+		UpdateWinningCar();
 		for (int i = 0; i < membersInGeneration; i++) {
 			cars[i].ResetCar();
 		}
@@ -195,7 +185,7 @@ public class GenomeGenerator : MonoBehaviour
 		}
 
 		// Attempt to introduce diversity by altering cars that are too similar to the winning car.
-		int statCloneCount = 0, moveCloneCount = 0;
+		/*int statCloneCount = 0, moveCloneCount = 0;
 		for(int j = 0; j < membersInGeneration; j++) {
 			if (!population[j].elite) {
 				// Stat Similarity
@@ -225,7 +215,7 @@ public class GenomeGenerator : MonoBehaviour
 					}
 				}
 			}
-		}
+		}*/
 
 		// Save elites.
 		for (int i = 0; i < elites.Count; i++) {
@@ -593,6 +583,28 @@ public class GenomeGenerator : MonoBehaviour
 			car.acceleration -= statFix;
 			car.handling = car.statPoolSize - (car.topSpeed + car.acceleration);
 		}
+	}
+
+	private void UpdateWinningCar() {
+		if (cars.Count < 1) {
+			return;
+		}
+
+		if (winningCar != null) {
+			winningCar.gameObject.renderer.material = normalCarMaterial;
+			winningCar.MoveToMidground();
+		}
+
+		winningCarIndex = 0;
+		winningCar = cars[winningCarIndex];
+		for (int i = 1; i < cars.Count; i++) {
+			if (cars[i].Fitness > cars[winningCarIndex].Fitness) {
+				winningCarIndex = i;
+			}
+		}
+		winningCar = cars[winningCarIndex];
+		winningCar.gameObject.renderer.material = winningCarMaterial;
+		winningCar.MoveToForeground();
 	}
 }
 

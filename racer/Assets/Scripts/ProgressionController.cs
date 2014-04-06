@@ -11,9 +11,9 @@ public class ProgressionController : MonoBehaviour
 	void Update() {
 		Car winningCar = GenomeGenerator.Instance.winningCar;
 		if (winningCar) {
-			distanceText.text = "" + winningCar.distance;
+			//distanceText.text = "" + winningCar.distance;
 			fitnessText.text = "" + (int)winningCar.Fitness;
-			lapCountText.text = "" + winningCar.lapCount;
+			//lapCountText.text = "" + winningCar.lapCount;
 		}
 	}
 }

@@ -46,7 +46,7 @@ public class Car : MonoBehaviour {
 	public TextMesh numberText;
 	public int Fitness {
 		get {
-			float distanceMetric = distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack));
+			float distanceMetric = distanceOnTrack * distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack));
 			float timeMetric = ((durationOnTrack * 10) + durationAboveHalfSpeed) / durationRacing;
 			float scale = 0.1f;
 

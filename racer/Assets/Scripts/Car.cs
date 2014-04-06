@@ -47,8 +47,8 @@ public class Car : MonoBehaviour {
 	public int Fitness {
 		get {
 			float distanceMetric = distanceOnTrack * (distanceOnTrack - (distance - distanceOnTrack));
-			float timeMetric = ((durationOnTrack * 2) + durationAboveHalfSpeed) / durationRacing;
-			float scale = 1;
+			float timeMetric = ((durationOnTrack * 10) + durationAboveHalfSpeed) / durationRacing;
+			float scale = 0.1f;
 
 			return (int)(Mathf.Max(1, distanceMetric * timeMetric * scale));
 		}

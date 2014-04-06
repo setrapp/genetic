@@ -78,7 +78,10 @@ public class GenomeGenerator : MonoBehaviour
 		cars.Clear();
 		GameObject[] carObjects = GameObject.FindGameObjectsWithTag("Car");
 		for (int i = 0; i < carObjects.Length; i++) {
-			cars.Add(carObjects[i].GetComponent<Car>());
+			Car car = carObjects[i].GetComponent<Car>();
+			if (car != null) {
+				cars.Add(car);
+			}
 		}
 		membersInGeneration = cars.Count;
 		for (int i = 0; i < membersInGeneration; i++) {
@@ -107,6 +110,7 @@ public class GenomeGenerator : MonoBehaviour
 	void Update() {
 		if (winningCar != null) {
 			winningCar.gameObject.renderer.material = normalCarMaterial;
+			winningCar.transform.Translate(0, 0, 1);
 			winningCarIndex = 0;
 			for (int i = 1; i < cars.Count; i++) {
 				if (cars[i].Fitness > cars[winningCarIndex].Fitness) {
@@ -115,6 +119,7 @@ public class GenomeGenerator : MonoBehaviour
 			}
 			winningCar = cars[winningCarIndex];
 			winningCar.gameObject.renderer.material = winningCarMaterial;
+			winningCar.transform.Translate(0, 0, -1);
 		}
 	}
 
@@ -158,17 +163,6 @@ public class GenomeGenerator : MonoBehaviour
 		}
 		avgFitness /= membersInGeneration;
 
-		// Occasionally, eliminate poor performing cars and introduce random new ones.
-		/*if ((float)genomeRandom.NextDouble() < catastropheRate) {
-			float minFitness = avgFitness / 4;
-			for (int i = 0; i < population.Count; i++) {
-				if (population[i].car.distanceOnTrack < minFitness) {
-					RandomizeStats(population[i].car);
-					population[i].car.driver.GenerateAllMoves();
-				}
-			}
-		}*/
-
 		// Store a list of elite cars.
 		List<Genome> elites = new List<Genome>();
 		int eliteCount = (int)(population.Count * elitePortion);
@@ -200,40 +194,38 @@ public class GenomeGenerator : MonoBehaviour
 			}
 		}
 
-		// Attempt to introduce diversity by altering cars that are too similar.
+		// Attempt to introduce diversity by altering cars that are too similar to the winning car.
 		int statCloneCount = 0, moveCloneCount = 0;
-		//for (int i = 0; i < membersInGeneration; i++) {
-			for(int j = 0; j < membersInGeneration; j++) { //i + 1; j < membersInGeneration; j++) {
-				if (!population[j].elite) {
-					// Stat Similarity
-					float statSimilarity = SimilarityToStats(population[winningCarIndex], population[j]);
-					if (statSimilarity > dangerousSimilarity) {
-						if (statCloneCount >= dangerousCloneCount) {
-							RandomizeStats(population[j].car);
-						} else {
-							statCloneCount++;
-						}
+		for(int j = 0; j < membersInGeneration; j++) {
+			if (!population[j].elite) {
+				// Stat Similarity
+				float statSimilarity = SimilarityToStats(population[winningCarIndex], population[j]);
+				if (statSimilarity > dangerousSimilarity) {
+					if (statCloneCount >= dangerousCloneCount) {
+						RandomizeStats(population[j].car);
+					} else {
+						statCloneCount++;
 					}
+				}
 
-					// Move Similarity
-					float moveSimilarity = population[j].car.driver.SimilarityToMoveList(winningCar.driver.moves);
-					if (moveSimilarity > dangerousSimilarity) {
-						if (moveCloneCount >= dangerousCloneCount) {
-							// Either generate a full list of new moves, or only genrate later moves.
-							if ((float)genomeRandom.NextDouble() < randomizeMoveRate) {
-								population[j].car.driver.GenerateAllMoves();
-							} else {
-								float saveMovePortion = (float)genomeRandom.NextDouble();
-								saveMovePortion *= (population[j].car.durationOnTrack / population[j].car.durationRacing);
-								population[j].car.driver.GenerateLaterMoves(saveMovePortion);
-							}
+				// Move Similarity
+				float moveSimilarity = population[j].car.driver.SimilarityToMoveList(winningCar.driver.moves);
+				if (moveSimilarity > dangerousSimilarity) {
+					if (moveCloneCount >= dangerousCloneCount) {
+						// Either generate a full list of new moves, or only genrate later moves.
+						if ((float)genomeRandom.NextDouble() < randomizeMoveRate) {
+							population[j].car.driver.GenerateAllMoves();
 						} else {
-							moveCloneCount++;
+							float saveMovePortion = (float)genomeRandom.NextDouble();
+							saveMovePortion *= (population[j].car.durationOnTrack / population[j].car.durationRacing);
+							population[j].car.driver.GenerateLaterMoves(saveMovePortion);
 						}
+					} else {
+						moveCloneCount++;
 					}
 				}
 			}
-		//}
+		}
 
 		// Save elites.
 		for (int i = 0; i < elites.Count; i++) {

@@ -21,6 +21,13 @@ public class StartUp : MonoBehaviour {
 
 	void Start() {
 		DontDestroyOnLoad(gameObject);
+		Camera.main.aspect = 16.0f / 9;
+	}
+
+	void Update() {
+		if (Input.GetKey (KeyCode.Escape)) {
+			Application.Quit();
+		}
 	}
 
 	public void StartRun() {

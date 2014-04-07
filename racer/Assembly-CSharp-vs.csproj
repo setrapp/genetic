@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\GeneticDriver.cs" />
      <Compile Include="Assets\Scripts\GenomeGenerator.cs" />
      <Compile Include="Assets\Scripts\ProgressionController.cs" />
+     <Compile Include="Assets\Scripts\ScreenCapper.cs" />
      <Compile Include="Assets\Scripts\StartButton.cs" />
      <Compile Include="Assets\Scripts\StartUp.cs" />
      <Compile Include="Assets\Scripts\StatsController.cs" />

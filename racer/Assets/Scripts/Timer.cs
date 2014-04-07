@@ -14,7 +14,7 @@ public class Timer : MonoBehaviour
 	}
 
 	public int durationSec;
-	private float timeMillisec;
+	public float timeMillisec;
 	public string timeString;
 	public bool done;
 

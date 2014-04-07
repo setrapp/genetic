@@ -18,6 +18,7 @@ public class GenomeGenerator : MonoBehaviour
 	public int targetFrameRate = 60;
 	public float timeScaling = 1;
 	public WriterReader writerReader= null;
+	public ScreenCapper screenCapper = null;
 	public bool readFromFile = false;
 	public bool writeToFile = false;
 	public bool done = false;
@@ -109,9 +110,24 @@ public class GenomeGenerator : MonoBehaviour
 
 	void Update() {
 		UpdateWinningCar();
+
+		// Record capture if needed.
+		if (Timer.Instance.timeMillisec - (Time.deltaTime * 1000 * 2) <= 0) {
+
+		}
 	}
 
 	public void TimerDone() {
+		if (!screenCapper.CheckCapture()) {
+			EndGeneration();
+		}
+	}
+
+	public void PostScreenCapture() {
+		EndGeneration();
+	}
+
+	public void EndGeneration() {
 		// Record fitness.
 		for (int i = 0; i < membersInGeneration; i++) {
 			population[i].endingFitness = cars[i].Fitness;
